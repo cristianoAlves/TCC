@@ -17,14 +17,14 @@
 <br>
 
 <table>
-	<tr>
-		<th>Passo n</th>
-		<th>Descricao</th>
+    <tr>
+        <th>Passo n</th>
+        <th>Descricao</th>
     {% for passos in listaDePassos %}
     <tr> 
-		<td>{{ passos.n_passo }}</td>
-		<td>{{ passos.desc_passos }}</td>
-	</tr>	
+        <td>{{ passos.n_passo }}</td>
+        <td>{{ passos.desc_passos }}</td>
+    </tr>
     {% endfor %}	    
 {% else %}
     <p>Sem caso de testes cadastrados.</p>

@@ -5,36 +5,75 @@
 <title>Insert title here</title>
 <!-- Bootstrap -->
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
-
+<style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+</style>
 
 
 </head>
 <body>
-<ul class="nav nav-pills">
-  <li class="active">
-    <a href="#">Home</a>
-  </li>
-  <li><a href="#">...</a></li>
-  <li><a href="#">...</a></li>
-</ul>
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Project name</a>
+          <div class="nav-collapse collapse">
+            <p class="navbar-text pull-right">
+              Logged in as <a href="#" class="navbar-link">Username</a>
+            </p>
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+</div>
+
+<div class="span9">    
+    <div class="row-fluid">
+        <div class="hero-unit">
+        <div class="btn-toolbar">
+                <div class="btn-group">
+                    <a class="btn" href="#"><i class="icon-plus"></i></a>
+                </div>
+            </div>
+            <h3>Casos de testes</h3>
+            
+            
+            
+            {% if listaCasoTestes %}
+                <table class="table table-hover">
+                <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    {% for CasoDeTeste in listaCasoTestes %}
+                        <tr>
+                            <td> {{ CasoDeTeste.id }}</td>
+                            <td> <a href="/gerenciador_testes/{{ CasoDeTeste.id }}/">{{ CasoDeTeste.titulo }}</a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Sem caso de testes cadastrados.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>  
 
 
-
-
-{% if listaCasoTestes %}
-    <ul>
-    {% for CasoDeTeste in listaCasoTestes %}
-        <li><a href="/gerenciador_testes/{{ CasoDeTeste.id }}/">{{ CasoDeTeste.titulo }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Sem caso de testes cadastrados.</p>
-{% endif %}
-
-
-
-
-
-
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
