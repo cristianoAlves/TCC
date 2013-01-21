@@ -19,15 +19,15 @@ class CasoDeTestePasso(models.Model):
     n_passo = models.IntegerField()
     desc_passos = models.CharField(max_length=200)
     
+    def __unicode__(self):
+        return self.desc_passos
+    
     class Meta:
         verbose_name = u'Passos dos casos de testes'
         verbose_name_plural = u'Passos dos casos de testes'
 
 class Status(models.Model):
-    status = models.BooleanField()
-    
-    def __unicode__(self):
-        return self.status
+    status = models.BooleanField()    
     
     class Meta:
         verbose_name = u'Status'
@@ -39,5 +39,5 @@ class Execucao(models.Model):
     exec_date = models.DateTimeField('data execucao')
     
     class Meta:
-        verbose_name = 'Execu��es'
-        verbose_name_plural = 'Execu��es'
+        verbose_name = 'Execuções'
+        verbose_name_plural = 'Execuções'

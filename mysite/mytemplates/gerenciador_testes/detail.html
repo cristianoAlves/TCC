@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type = "text/css">
+    table, td, th {
+      border: 1px solid black;
+    } 
+</style>
+
+</head>
+<body>
+{% if listaDePassos %}	
+<h1> {{ CasoTesteNome }} </h1>
+
+<br>
+
+<table>
+	<tr>
+		<th>Passo n</th>
+		<th>Descricao</th>
+    {% for passos in listaDePassos %}
+    <tr> 
+		<td>{{ passos.n_passo }}</td>
+		<td>{{ passos.desc_passos }}</td>
+	</tr>	
+    {% endfor %}	    
+{% else %}
+    <p>Sem caso de testes cadastrados.</p>
+{% endif %}
+</table>
+
+
+
+</body>
+</html>

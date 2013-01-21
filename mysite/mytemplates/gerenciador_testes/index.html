@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style type = "text/css">
+    table, td, th {
+      border: 1px solid black;
+    } 
+</style>
+
+</head>
+<body>
+{% if listaCasoTestes %}
+    <ul>
+    {% for CasoDeTeste in listaCasoTestes %}
+        <li><a href="/gerenciador_testes/{{ CasoDeTeste.id }}/">{{ CasoDeTeste.titulo }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Sem caso de testes cadastrados.</p>
+{% endif %}
+
+
+
+<br>
+<br>
+<br>
+<table>
+	<tr>
+		<th>Name</th>
+		<th>Side</th>
+		<th>Role</th>
+	<tr>
+		<td>Greedo</td>
+		<td>South</td>
+		<td>Scumbag</td>
+	</tr>
+</table>
+
+
+</body>
+</html>
