@@ -2,7 +2,7 @@ from django.template import Context, loader
 from gerenciador_testes.models import CasoDeTeste, CasoDeTestePasso
 from django.http import HttpResponse
 
-def index(request):
+def index(RequestContext):
     listaCasoTestes = CasoDeTeste.objects.all()
     t = loader.get_template('gerenciador_testes/index.html')
     c = Context({
