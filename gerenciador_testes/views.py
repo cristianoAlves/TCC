@@ -5,7 +5,14 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response
 
 
-def index(request):
+def login(request):       
+    c = Context({
+        'listaCasoTestes': 'ok',
+    })
+    return render_to_response('gerenciador_testes/login.html',
+                              c,
+                              context_instance=RequestContext(request))
+def principal(request):
     listaCasoTestes = CasoDeTeste.objects.all()   
     c = Context({
         'listaCasoTestes': listaCasoTestes,
@@ -13,6 +20,7 @@ def index(request):
     return render_to_response('gerenciador_testes/principal.html',
                               c,
                               context_instance=RequestContext(request))
+    
 
 def detail(request, CasoDeTeste_id):
     listaDePassos = CasoDeTestePasso.objects.filter(caso_teste__exact=CasoDeTeste_id)

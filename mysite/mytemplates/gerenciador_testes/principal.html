@@ -1,10 +1,9 @@
-{% extends "gerenciador_testes/index.html" %}
+{% extends "gerenciador_testes/base.html" %}
 
 {% block conteudo %}
 
-<div class="span9">    
-    <div class="row-fluid">
-        <div class="hero-unit">
+
+
         <div style="display:block">
         		<h3 style="float:left">Casos de testes</h3>
         		<div class="btn-group" style="float:right; margin-top:15px">
@@ -30,9 +29,8 @@
             {% else %}
                 <p>Sem caso de testes cadastrados.</p>
             {% endif %}
-        </div>
-    </div>
-</div> 
+
+
 
 
 {% endblock %}
