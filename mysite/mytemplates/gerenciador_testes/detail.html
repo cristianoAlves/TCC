@@ -1,16 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<style type = "text/css">
-    table, td, th {
-      border: 1px solid black;
-    } 
-</style>
+{% extends "gerenciador_testes/index.html" %}
 
-</head>
-<body>
+{% block conteudo %}
+
 {% if listaDePassos %}	
 <h1> {{ CasoTesteNome }} </h1>
 
@@ -31,7 +22,4 @@
 {% endif %}
 </table>
 
-
-
-</body>
-</html>
+{% endblock %}
