@@ -19,10 +19,10 @@
                 <tr>
                     <th>#</th>
                     <th>Nome</th>
-                    {% for CasoDeTeste in listaCasoTestes %}
+                    {% for casoDeTeste in listaCasoTestes %}
                         <tr>
-                            <td> {{ CasoDeTeste.id }}</td>
-                            <td> <a href="/gerenciador_testes/{{ CasoDeTeste.id }}/">{{ CasoDeTeste.titulo }}</a></td>
+                            <td> {{ casoDeTeste.id }}</td>
+                            <td> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/">{{ casoDeTeste.titulo }}</a></td>
                         </tr>
                     {% endfor %}
                 </table>

@@ -3,7 +3,7 @@
 {% block conteudo %}
 
 {% if listaDePassos %}	
-<h1> {{ CasoTesteNome }} </h1>
+<h1> {{ casoTesteNome }} </h1>
 
 <br>
 
@@ -11,10 +11,12 @@
     <tr>
         <th>Passo n</th>
         <th>Descricao</th>
+        <th>Resultado</th>
     {% for passos in listaDePassos %}
     <tr> 
-        <td>{{ passos.n_passo }}</td>
-        <td>{{ passos.desc_passos }}</td>
+        <td>{{ passos.nPasso }}</td>
+        <td>{{ passos.desc }}</td>
+        <td>{{ passos.resultExperado }}</td>
     </tr>
     {% endfor %}	    
 {% else %}

@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 
-
-class CasoDeTeste(models.Model):
+class casoDeTeste(models.Model):
     titulo = models.CharField(max_length=200)
-    caminho_sikuli = models.CharField(max_length=200)
+    caminhoSikuli = models.CharField(max_length=200)
     
     def __unicode__(self):
         return self.titulo
@@ -14,30 +13,24 @@ class CasoDeTeste(models.Model):
         verbose_name = u'Casos de teste'
         verbose_name_plural = u'Casos de teste'
     
-class CasoDeTestePasso(models.Model):
-    caso_teste = models.ForeignKey(CasoDeTeste)
-    n_passo = models.IntegerField()
-    desc_passos = models.CharField(max_length=200)
+class casoDeTestePasso(models.Model):
+    casoDeTeste = models.ForeignKey(casoDeTeste)
+    nPasso = models.IntegerField()
+    desc = models.CharField(max_length=200)
+    resultExperado = models.CharField(max_length=200)
     
-    def __unicode__(self):
-        return self.desc_passos
-    
-    class Meta:
+class Meta:
         verbose_name = u'Passos dos casos de testes'
         verbose_name_plural = u'Passos dos casos de testes'
-
-class Status(models.Model):
-    status = models.BooleanField()    
+        
+class testSet(models.Model):    
+    nome = models.CharField(max_length=200)
+    dataAbertura = models.DateField('data de abertura')
+    dataFechamento = models.DateField('data de fechamento', null=True, blank=True)
     
-    class Meta:
-        verbose_name = u'Status'
-        verbose_name_plural = u'Status'
+    def __unicode__(self):
+        return self.nome
     
-class Execucao(models.Model):
-    caso_teste = models.ForeignKey(CasoDeTeste)
-    status = models.ForeignKey(Status)
-    exec_date = models.DateTimeField('data execucao')
-    
-    class Meta:
-        verbose_name = 'Execuções'
-        verbose_name_plural = 'Execuções'
+class casoDeTesteVsTestSet(models.Model):
+    casoDeTeste = models.ForeignKey(casoDeTeste)
+    testSet = models.ForeignKey(testSet)

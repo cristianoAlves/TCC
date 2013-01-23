@@ -1,7 +1,7 @@
-from gerenciador_testes.models import CasoDeTeste, CasoDeTestePasso, Status, Execucao
+from gerenciador_testes.models import casoDeTeste, casoDeTestePasso, testSet, casoDeTesteVsTestSet
 from django.contrib import admin
 
-admin.site.register(CasoDeTeste)
-admin.site.register(CasoDeTestePasso)
-admin.site.register(Status)
-admin.site.register(Execucao)
+admin.site.register(casoDeTeste)
+admin.site.register(casoDeTestePasso)
+admin.site.register(testSet)
+admin.site.register(casoDeTesteVsTestSet)

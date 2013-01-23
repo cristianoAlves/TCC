@@ -1,6 +1,6 @@
 from django.template import Context, loader
 from django.template import RequestContext
-from gerenciador_testes.models import CasoDeTeste, CasoDeTestePasso
+from gerenciador_testes.models import casoDeTeste, casoDeTestePasso
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 
@@ -13,7 +13,7 @@ def login(request):
                               c,
                               context_instance=RequestContext(request))
 def principal(request):
-    listaCasoTestes = CasoDeTeste.objects.all()   
+    listaCasoTestes = casoDeTeste.objects.all()   
     c = Context({
         'listaCasoTestes': listaCasoTestes,
     })
@@ -22,19 +22,19 @@ def principal(request):
                               context_instance=RequestContext(request))
     
 
-def detail(request, CasoDeTeste_id):
-    listaDePassos = CasoDeTestePasso.objects.filter(caso_teste__exact=CasoDeTeste_id)
-    CasoTesteNome = CasoDeTeste.objects.get(pk=CasoDeTeste_id).titulo
+def detail(request, casoDeTeste_id):
+    listaDePassos = casoDeTestePasso.objects.filter(casoDeTeste__exact=casoDeTeste_id)
+    casoTesteNome = casoDeTeste.objects.get(pk=casoDeTeste_id).titulo
 
     c = Context({
         'listaDePassos': listaDePassos,
-        'CasoTesteNome': CasoTesteNome,
+        'casoTesteNome': casoTesteNome,
     })
     return render_to_response('gerenciador_testes/detail.html',
                               c,
                               context_instance=RequestContext(request))
 
-def passos(request, CasoDeTeste_id):
-    return HttpResponse("You're looking at the passos of caso de teste %s." % CasoDeTeste_id)
+def passos(request, casoDeTeste_id):
+    return HttpResponse("You're looking at the passos of caso de teste %s." % casoDeTeste_id)
 
 

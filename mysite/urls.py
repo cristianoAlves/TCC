@@ -7,7 +7,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^gerenciador_testes/$', 'gerenciador_testes.views.login'),
     url(r'^gerenciador_testes/principal/$', 'gerenciador_testes.views.principal'),
-    url(r'^gerenciador_testes/(?P<CasoDeTeste_id>\d+)/$', 'gerenciador_testes.views.detail'),
-    url(r'^gerenciador_testes/(?P<CasoDeTeste_id>\d+)/passos/$', 'gerenciador_testes.views.passos'),
+    url(r'^gerenciador_testes/(?P<casoDeTeste_id>\d+)/$', 'gerenciador_testes.views.detail'),
+    url(r'^gerenciador_testes/(?P<casoDeTeste_id>\d+)/passos/$', 'gerenciador_testes.views.passos'),
     url(r'^admin/', include(admin.site.urls)),
 )
