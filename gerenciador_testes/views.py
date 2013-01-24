@@ -1,15 +1,16 @@
-from django.template import Context, loader
+from django.template import Context
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from gerenciador_testes.models import casoDeTeste, casoDeTestePasso
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
+from django.contrib import auth
 
 
-
-def login(request):    
-    c = Context({})
-    return render_to_response('django.contrib.auth.views.login', c, context_instance=RequestContext(request))
+def logoutRequest(request):
+    auth.logout(request)
+    # Redirect to a success page.
+    return HttpResponseRedirect('/gerenciador_testes/login')    
 
 def principal(request):
     if not request.user.is_authenticated():

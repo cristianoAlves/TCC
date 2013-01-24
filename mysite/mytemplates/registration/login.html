@@ -1,5 +1,6 @@
 {% extends "gerenciador_testes/baseNavbarFixedTop.html" %}
 
+
 {% block estilo %}
 .form-signin {
         max-width: 300px;
@@ -29,6 +30,11 @@
 
 
 {% block conteudo %}
+
+{% if user.is_authenticated %}
+<meta HTTP-EQUIV="REFRESH" content="0; url=/gerenciador_testes/principal/">
+{% endif %}
+
 <div class="container">
 	{% if form.errors %}
 	    <p>Your username and password didn't match.
@@ -40,7 +46,10 @@
 	   {{ form.username }}
 	   <p><label for="id_password">Senha:</label> 
 	   {{ form.password }}</p>
-	   <input type="hidden" name="next" value="/" />
+	   
+	   <!--  server para redirecionar depois do login -->
+	   <input type="hidden" name="next" value="/gerenciador_testes/principal/" />
+	   
 	   <label class="checkbox">
             <input type="checkbox" value="remember-me"> lembrar?
         </label>
