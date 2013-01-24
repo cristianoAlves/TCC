@@ -20,7 +20,14 @@
     </tr>
     {% endfor %}	    
 {% else %}
-    <p>Sem caso de testes cadastrados.</p>
+
+<div class="alert alert-warning">
+    <div style="display:block">        
+        <a href="/gerenciador_testes/principal/" role="button" class="close" data-dismiss="alert">&times;</a>
+        <i class="icon-ban-circle" style="float:left; margin-top:7px"></i>   
+        <p>&nbsp;&nbsp;Sem caso de testes cadastrados.</p>
+    </div>
+</div>
 {% endif %}
 </table>
 
