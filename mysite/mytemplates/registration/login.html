@@ -37,12 +37,14 @@
 
 <div class="container">
 	{% if form.errors %}
-	    <p>Your username and password didn't match.
-	        Please try again.</p>
+    <div class="alert alert-error">
+         <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Erro!</strong> Usuário ou senha incorreto
+    </div>
 	{% endif %}
 	<form class="form-signin" method="post" action="">{% csrf_token %}
 	   <h2 class="form-signin-heading">Login</h2> <br>
-	   <p><label for="id_username">Usuario:</label> 
+	   <p><label for="id_username">Usuário:</label> 
 	   {{ form.username }}
 	   <p><label for="id_password">Senha:</label> 
 	   {{ form.password }}</p>

@@ -5,6 +5,8 @@ from gerenciador_testes.models import casoDeTeste, casoDeTestePasso
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.contrib import auth
+from forms import CasoDeTesteForm
+
 
 
 def logoutRequest(request):
@@ -15,9 +17,11 @@ def logoutRequest(request):
 def principal(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
-    listaCasoTestes = casoDeTeste.objects.all()   
+    listaCasoTestes = casoDeTeste.objects.all()
+    form =  CasoDeTesteForm()  
     c = Context({
         'listaCasoTestes': listaCasoTestes,
+        'form': form,
     })
     return render_to_response('gerenciador_testes/principal.html',
                               c,
@@ -38,7 +42,22 @@ def detail(request, casoDeTeste_id):
                               c,
                               context_instance=RequestContext(request))
 
-def passos(request, casoDeTeste_id):
-    return HttpResponse("You're looking at the passos of caso de teste %s." % casoDeTeste_id)
+def adicionaCasoDeTeste(request):
+    if request.method == 'POST':                        # If the form has been submitted...
+        form = CasoDeTesteForm(request.POST)            # A form bound to the POST data
+        if form.is_valid():                             # All validation rules pass
+            titulo_post = request.POST.get('titulo')
+            caminho_post = request.POST.get('caminhoSikuli')
+            casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
+            casoDeTeste_obj.save()
+            # ...
+            return HttpResponseRedirect('../../gerenciador_testes/principal')     # Redirect after POST
+    else:
+        form = CasoDeTesteForm()                            # An unbound form
+
+    return render_to_response('gerenciador_testes/',
+                              {'form': form},
+                              context_instance=RequestContext(request))
+
 
 

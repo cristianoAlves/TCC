@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.db import models
+from django.forms import ModelForm
 
 class casoDeTeste(models.Model):
     titulo = models.CharField(max_length=200)
@@ -18,6 +19,9 @@ class casoDeTestePasso(models.Model):
     nPasso = models.IntegerField()
     desc = models.CharField(max_length=200)
     resultExperado = models.CharField(max_length=200)
+    
+    def __unicode__(self):
+        return u'%s, passo %s' % (self.casoDeTeste.titulo, self.nPasso)
     
 class Meta:
         verbose_name = u'Passos dos casos de testes'

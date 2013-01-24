@@ -8,6 +8,7 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^gerenciador_testes/login/$', 'django.contrib.auth.views.login'),
     url(r'^gerenciador_testes/principal/$', 'gerenciador_testes.views.principal'),
+    url(r'^gerenciador_testes/principal/adicionarTeste$', 'gerenciador_testes.views.adicionaCasoDeTeste'),
     url(r'^gerenciador_testes/logout/$', 'gerenciador_testes.views.logoutRequest'),
     url(r'^gerenciador_testes/(?P<casoDeTeste_id>\d+)/$', 'gerenciador_testes.views.detail'),
     url(r'^gerenciador_testes/(?P<casoDeTeste_id>\d+)/passos/$', 'gerenciador_testes.views.passos'),
