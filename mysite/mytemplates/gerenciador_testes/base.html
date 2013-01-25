@@ -80,10 +80,18 @@
     </div><!--/.fluid-container-->
     
 
-
-
-
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+
+<script>
+
+$(document).ready(function() {
+    {% block meuscript %}
+
+    {% endblock %}
+});
+
+</script>
+
 </body>
 </html>

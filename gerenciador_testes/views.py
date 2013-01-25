@@ -17,12 +17,29 @@ def logoutRequest(request):
 def principal(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
-    listaCasoTestes = casoDeTeste.objects.all()
-    form =  CasoDeTesteForm()  
+    
+    form_has_any_error = False
+    
+    listaCasoTestes = casoDeTeste.objects.all()        
+    if request.method == 'POST':                        # If the form has been submitted...
+        form = CasoDeTesteForm(request.POST)            # A form bound to the POST data
+        if form.is_valid():                             # All validation rules pass
+            titulo_post = form.cleaned_data['titulo']
+            caminho_post = form.cleaned_data['caminhoSikuli']
+            casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
+            casoDeTeste_obj.save()
+            return HttpResponseRedirect('../../gerenciador_testes/principal')
+        else:
+            form_has_any_error = True
+    else:    
+        form =  CasoDeTesteForm()
+    
     c = Context({
-        'listaCasoTestes': listaCasoTestes,
-        'form': form,
+                 'listaCasoTestes': listaCasoTestes,
+                 'form': form,
+                 'form_has_any_errors' : form_has_any_error,
     })
+        
     return render_to_response('gerenciador_testes/principal.html',
                               c,
                               context_instance=RequestContext(request))
@@ -41,23 +58,3 @@ def detail(request, casoDeTeste_id):
     return render_to_response('gerenciador_testes/detail.html',
                               c,
                               context_instance=RequestContext(request))
-
-def adicionaCasoDeTeste(request):
-    if request.method == 'POST':                        # If the form has been submitted...
-        form = CasoDeTesteForm(request.POST)            # A form bound to the POST data
-        if form.is_valid():                             # All validation rules pass
-            titulo_post = request.POST.get('titulo')
-            caminho_post = request.POST.get('caminhoSikuli')
-            casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
-            casoDeTeste_obj.save()
-            # ...
-            return HttpResponseRedirect('../../gerenciador_testes/principal')     # Redirect after POST
-    else:
-        form = CasoDeTesteForm()                            # An unbound form
-
-    return render_to_response('gerenciador_testes/',
-                              {'form': form},
-                              context_instance=RequestContext(request))
-
-
-
