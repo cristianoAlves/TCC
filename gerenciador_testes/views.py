@@ -2,7 +2,6 @@ from django.template import Context
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from gerenciador_testes.models import casoDeTeste, casoDeTestePasso
-from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.contrib import auth
 from forms import CasoDeTesteForm
@@ -21,9 +20,9 @@ def principal(request):
     form_has_any_error = False
     
     listaCasoTestes = casoDeTeste.objects.all()        
-    if request.method == 'POST':                        # If the form has been submitted...
-        form = CasoDeTesteForm(request.POST)            # A form bound to the POST data
-        if form.is_valid():                             # All validation rules pass
+    if request.method == 'POST':  # If the form has been submitted...
+        form = CasoDeTesteForm(request.POST)  # A form bound to the POST data
+        if form.is_valid():  # All validation rules pass
             titulo_post = form.cleaned_data['titulo']
             caminho_post = form.cleaned_data['caminhoSikuli']
             casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
@@ -32,7 +31,7 @@ def principal(request):
         else:
             form_has_any_error = True
     else:    
-        form =  CasoDeTesteForm()
+        form = CasoDeTesteForm()
     
     c = Context({
                  'listaCasoTestes': listaCasoTestes,

@@ -13,7 +13,7 @@
             
 <!-- Modal -->
 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">    
-    <form method="post" action="">{% csrf_token %}        
+    <form name='myForm' method="post" action="">{% csrf_token %}        
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" action="">×</button>
             <h3 id="myModalLabel">Adicionar um Caso de Teste</h3>
@@ -21,37 +21,39 @@
         <div class="modal-body">
             {{ form.as_p }}
         </div> 
-        <div class="modal-footer">
-            <!--  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>-->
-            <a href="" role= "button" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-            <button class="btn btn-primary" type="submit">Save changes</button>
+        <div class="modal-footer">            
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="limpaCamposAdicionaTesteCase()">Limpar</button>
+            <button class="btn btn-primary" type="submit">Salvar</button>
         </div>
     </form>
 </div>
-            
-            
-            
-            {% if listaCasoTestes %}
-                <table class="table table-hover">
-                <tr>
-                    <th>#</th>
-                    <th>Nome</th>
-                    {% for casoDeTeste in listaCasoTestes %}
-                        <tr>
-                            <td> {{ casoDeTeste.id }}</td>
-                            <td> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/">{{ casoDeTeste.titulo }}</a></td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            {% else %}
-                <p>Sem caso de testes cadastrados.</p>
-            {% endif %}
 
+{% if listaCasoTestes %}
+    <table class="table table-hover">
+        <tr>
+            <th>#</th>
+            <th>Nome</th>                    
+            {% for casoDeTeste in listaCasoTestes %}
+                <tr>
+                    <td> {{ casoDeTeste.id }}</td>
+                    <td> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/">{{ casoDeTeste.titulo }}</a></td>
+                </tr>
+            {% endfor %}
+                </table>
+{% else %}
+    <p>Sem caso de testes cadastrados.</p>
+{% endif %}
 {% endblock %}
 
 {% block meuscript %}
+$(document).ready(function() {
     {% if form_has_any_errors %}
-        $('#myModal').modal('show');
-    {% endif %}
-{% endblock %}
+        $('#myModal').modal('show');        
+    {% endif %}    
+});
 
+function limpaCamposAdicionaTesteCase()
+{
+    window.location = '.';
+}   
+{% endblock %}

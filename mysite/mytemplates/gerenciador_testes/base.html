@@ -84,13 +84,9 @@
 <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
 
 <script>
+{% block meuscript %}
 
-$(document).ready(function() {
-    {% block meuscript %}
-
-    {% endblock %}
-});
-
+{% endblock %}
 </script>
 
 </body>
