@@ -3,16 +3,14 @@
 {% block conteudo %}
 
 {% if listaDePassos %}	
-<h1> {{ casoTesteNome }} </h1>
-
-<br>
-
-<table>
-    <tr>
-        <th>Passo n</th>
-        <th>Descricao</th>
-        <th>Resultado</th>
-    {% for passos in listaDePassos %}
+    <h3> {{ casoTesteNome }} </h3>
+    <br>
+    <table>
+        <tr>
+            <th>Passo n</th>
+            <th>Descricao</th>
+            <th>Resultado Esperado</th>
+        {% for passos in listaDePassos %}
     <tr> 
         <td>{{ passos.nPasso }}</td>
         <td>{{ passos.desc }}</td>
@@ -25,7 +23,7 @@
     <div style="display:block">        
         <a href="/gerenciador_testes/principal/" role="button" class="close" data-dismiss="alert">&times;</a>
         <i class="icon-ban-circle" style="float:left; margin-top:7px"></i>   
-        <p>&nbsp;&nbsp;Sem caso de testes cadastrados.</p>
+        <p>&nbsp;&nbsp;Sem passos cadastrados.</p>
     </div>
 </div>
 {% endif %}
