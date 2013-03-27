@@ -12,5 +12,6 @@ urlpatterns = patterns('',
     url(r'^gerenciador_testes/logout/$', 'gerenciador_testes.views.logoutRequest'),
     url(r'^gerenciador_testes/(?P<casoDeTeste_id>\d+)/$', 'gerenciador_testes.views.detail'),
     url(r'^gerenciador_testes/(?P<casoDeTeste_id>\d+)/passos/$', 'gerenciador_testes.views.passos'),
+    url(r'^gerenciador_testes/(?P<casoDeTeste_id>\d+)/registra/passou$', 'gerenciador_testes.views.registra_passou'),
     url(r'^admin/', include(admin.site.urls)),
 )

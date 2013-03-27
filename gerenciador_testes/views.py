@@ -5,6 +5,7 @@ from gerenciador_testes.models import casoDeTeste, casoDeTestePasso
 from django.shortcuts import render_to_response
 from django.contrib import auth
 from forms import CasoDeTesteForm
+from django.utils.datastructures import MultiValueDictKeyError
 
 
 
@@ -44,16 +45,32 @@ def principal(request):
                               context_instance=RequestContext(request))
     
 
+def registra_passou (request, casoDeTeste_id):
+    print "O teste %s passou!!" % casoDeTeste_id
+    return HttpResponseRedirect('/gerenciador_testes/login')
+
 def detail(request, casoDeTeste_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
+    
     listaDePassos = casoDeTestePasso.objects.filter(casoDeTeste__exact=casoDeTeste_id)
     casoTesteNome = casoDeTeste.objects.get(pk=casoDeTeste_id).titulo
-
+    
+    ex = None
+    
+    try:
+        if 'executar' in request.GET.keys():
+            ex = True
+    except MultiValueDictKeyError:
+        pass
+    
     c = Context({
         'listaDePassos': listaDePassos,
         'casoTesteNome': casoTesteNome,
+        'ex': ex,
+        
     })
     return render_to_response('gerenciador_testes/detail.html',
                               c,
                               context_instance=RequestContext(request))
+    
