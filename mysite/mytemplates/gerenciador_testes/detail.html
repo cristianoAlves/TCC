@@ -3,16 +3,23 @@
 {% block conteudo %}
 
 {% if listaDePassos %}	
-    <h3> {{ casoTesteNome }} </h3>
+    <div style="display:block">
+        <h3 style="float:left"> {{ casoTesteNome }} </h3>
+        {% if not ex %}    
+            <div class="btn-group" style="float:right; margin-top:15px">
+                <a href="#myModal" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>
+            </div>
+        {% endif %}
+    </div>
     <br>
-    <table>
+    <table class="table table-hover">
         <tr>
-            <th>Passo n</th>
-            <th>Descricao</th>
+            <th style="text-align:center">Passo n</th>
+            <th  style="text-align:left">Descricao</th>
             <th>Resultado Esperado</th>
         {% for passos in listaDePassos %}
     <tr> 
-        <td>{{ passos.nPasso }}</td>
+        <td style="text-align:center">{{ passos.nPasso }}</td>
         <td>{{ passos.desc }}</td>
         <td>{{ passos.resultExperado }}</td>
     </tr>
@@ -30,7 +37,20 @@
 </table>
 
 {% if ex %}
-  <a href="registra/passou" class="btn btn-large">passou</a>
+    <div class="btn-toolbar" style="width:100%;  margin: 10px auto 0px auto; text-align: center; padding: 10px 0;">
+        <div class="btn-group">
+            <a href="registra/cancelar" class="btn btn-large">Cancelar</a>
+        </div>
+        <div class="btn-group">
+            <a href="registra/passou" class="btn btn-large"><i class="icon-ok"></i>&nbsp;&nbsp;Passou</a>
+        </div>
+        <div class="btn-group">
+            <a href="registra/falhou" class="btn btn-danger btn-large"><i class="icon-remove-circle icon-white"></i>&nbsp;&nbsp;Falhou</a>
+        </div>
+        <div class="btn-group">
+            <a href="registra/sikuli" class="btn btn-large">Sikuli</a>
+        </div>
+    </div>
 {% endif %}
 
 {% endblock %}

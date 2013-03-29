@@ -45,9 +45,17 @@ def principal(request):
                               context_instance=RequestContext(request))
     
 
-def registra_passou (request, casoDeTeste_id):
-    print "O teste %s passou!!" % casoDeTeste_id
-    return HttpResponseRedirect('/gerenciador_testes/login')
+def registra_cancelar (request, casoDeTeste_id):    
+    return HttpResponseRedirect('/gerenciador_testes/principal')
+
+def registra_passou (request, casoDeTeste_id):    
+    return HttpResponseRedirect('/gerenciador_testes/principal')
+
+def registra_falhou (request, casoDeTeste_id):    
+    return HttpResponseRedirect('/gerenciador_testes/principal')
+
+def registra_sikuli (request, casoDeTeste_id):    
+    return HttpResponseRedirect('/gerenciador_testes/principal')
 
 def detail(request, casoDeTeste_id):
     if not request.user.is_authenticated():
