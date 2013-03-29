@@ -6,6 +6,8 @@ from django.shortcuts import render_to_response
 from django.contrib import auth
 from forms import CasoDeTesteForm
 from django.utils.datastructures import MultiValueDictKeyError
+import subprocess
+
 
 
 
@@ -51,19 +53,27 @@ def registra_cancelar (request, casoDeTeste_id):
 def registra_passou (request, casoDeTeste_id):    
     return HttpResponseRedirect('/gerenciador_testes/principal')
 
-def registra_falhou (request, casoDeTeste_id):    
+def registra_falhou (request, casoDeTeste_id):   
     return HttpResponseRedirect('/gerenciador_testes/principal')
 
-def registra_sikuli (request, casoDeTeste_id):    
-    return HttpResponseRedirect('/gerenciador_testes/principal')
+def registra_sikuli (request, casoDeTeste_id):
+    casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
+    sikuliPath = 'C:\\"Program Files (x86)\\Sikuli X\\Sikuli-IDE.bat" -r '
+    caminhoTesteSikuli = casoTeste.caminhoSikuli
+    subprocess.Popen(sikuliPath + caminhoTesteSikuli, shell=True)
+    
+    print ("==============sikuli===================\n")
+    print (casoTeste.caminhoSikuli)
+    print (sikuliPath + caminhoTesteSikuli)
+    return HttpResponseRedirect('/gerenciador_testes/1/?executar')
 
 def detail(request, casoDeTeste_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
     
     listaDePassos = casoDeTestePasso.objects.filter(casoDeTeste__exact=casoDeTeste_id)
-    casoTesteNome = casoDeTeste.objects.get(pk=casoDeTeste_id).titulo
-    
+    # casoTesteNome = casoDeTeste.objects.get(pk=casoDeTeste_id).titulo
+    casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
     ex = None
     
     try:
@@ -74,7 +84,7 @@ def detail(request, casoDeTeste_id):
     
     c = Context({
         'listaDePassos': listaDePassos,
-        'casoTesteNome': casoTesteNome,
+        'casoTeste': casoTeste,
         'ex': ex,
         
     })
