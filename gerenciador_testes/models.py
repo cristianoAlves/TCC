@@ -22,10 +22,37 @@ class casoDeTestePasso(models.Model):
     def __unicode__(self):
         return u'%s, passo %s' % (self.casoDeTeste.titulo, self.nPasso)
     
-class Meta:
+    class Meta:
         verbose_name = u'Passos dos casos de testes'
         verbose_name_plural = u'Passos dos casos de testes'
         
+class projeto(models.Model):
+    nomeProjeto = models.CharField(max_length=200)
+    dataAbertura = models.DateField('data de abertura')
+
+    def __unicode__(self):
+        return self.nomeProjeto
+    
+    class Meta:
+        verbose_name = u'Projetos'
+        verbose_name_plural = u'Projetos'
+
+class casoDeTesteEmProjeto(models.Model):
+    projeto = models.ForeignKey(projeto)
+    casoDeTeste = models.ForeignKey(casoDeTeste)
+    
+    def __unicode__(self):
+        return u'Projeto: %s, Caso de Teste: %s' % (self.projeto.nomeProjeto, self.casoDeTeste.titulo)
+    
+
+
+
+
+
+
+
+
+
 class testSet(models.Model):    
     nome = models.CharField(max_length=200)
     dataAbertura = models.DateField('data de abertura')

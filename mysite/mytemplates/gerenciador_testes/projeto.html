@@ -1,0 +1,64 @@
+{% extends "gerenciador_testes/base.html" %}
+
+{% block conteudo %}
+
+
+
+<div style="display:block">
+    <h3 style="float:left">Projetos</h3>
+    <div class="btn-group" style="float:right; margin-top:15px">
+        <a href="#myModal" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>
+    </div>
+</div>
+            
+<!-- Modal -->
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">    
+    <form name='myForm' method="post" action="">{% csrf_token %}        
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" action="">×</button>
+            <h3 id="myModalLabel">Adicionar um Projeto</h3>
+        </div>
+        <div class="modal-body">
+            {{ formProj.as_p }}
+        </div> 
+        <div class="modal-footer">            
+            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="limpaCamposAdicionaTesteCase()">Limpar</button>
+            <button class="btn btn-primary" type="submit">Salvar</button>
+        </div>
+    </form>
+</div>
+
+{% if listaProjetos %}
+    <table class="table table-hover">
+        <tr>
+            <th WIDTH="5%">#</th>
+            <th WIDTH="80%">Nome</th>
+            <th WIDTH="15%" colspan="3" style="text-align: center">Ações</th>                    
+            {% for projeto in listaProjetos %}
+                <tr>
+                    <td> {{ projeto.id }}</td>
+                    <td> <a href="/gerenciador_testes/projeto/{{ projeto.id }}/">{{ projeto.nomeProjeto }}</a></td>
+                    <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/editar/{{ projeto.id }}/" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
+                    <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/deletar/{{ projeto.id }}/" data-toggle="tooltip" title="Deletar"><i class="icon-trash"></i></a></td>
+                    <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/adicionarTestes/{{ projeto.id }}/" data-toggle="tooltip" title="Adicionar Teste"><i class="icon-plus"></i></a></td>
+                    
+                </tr>
+            {% endfor %}
+                </table>
+{% else %}
+    <p>Sem Projetos cadastrados.</p>
+{% endif %}
+{% endblock %}
+
+{% block meuscript %}
+$(document).ready(function() {
+    {% if form_has_any_errors %}
+        $('#myModal').modal('show');        
+    {% endif %}    
+});
+
+function limpaCamposAdicionaTesteCase()
+{
+    window.location = '.';
+}   
+{% endblock %}

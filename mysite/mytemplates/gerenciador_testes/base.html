@@ -20,8 +20,8 @@
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
         <div class="container-fluid">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
@@ -35,44 +35,56 @@
             </p>            
           </div><!--/.nav-collapse -->
         </div>
-      </div>
     </div>
+</div>
 
     
 <div class="container-fluid">
-      <div class="row-fluid">
+    <div class="row-fluid">
         <div class="span3">
-          <div class="well sidebar-nav">
-            <div style="width:100%;  margin: 0px auto 0px auto; text-align: center; padding: 10px 0; overflow: hidden;">
-                <img src="{{ STATIC_URL }}images/logo.png" class="img-rounded">
+            <div class="well sidebar-nav">
+                <div style="width:100%;  margin: 0px auto 0px auto; text-align: center; padding: 10px 0; overflow: hidden;">
+                    <img src="{{ STATIC_URL }}images/logo.png" class="img-rounded">
+                </div>
+                <div class="navbar-inner">
+                    <div class="container" style="width: auto;">
+                        <ul class="nav" role="navigation">
+                            <li class="dropdown">
+                                <h4 id="drop1" class="dropdown-toggle" data-toggle="dropdown">Escolha o Projeto <b class="caret"></b></h4>
+                                <h5>Projeto 1</h5>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="/gerenciador_testes/projeto/1/visao_geral">Projeto 1</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Projeto 2</a></li>
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Projeto 3</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                </br>
+ 
+          
+                <ul class="nav nav-list">
+                    <li class="nav-header">Projeto</li>
+                    <li><a href="/gerenciador_testes/projeto/1/visao_geral">Visão Geral</a></li>
+                    <li class="nav-header">Casos de Teste</li>
+                    <li><a href="/gerenciador_testes/principal/">Ver Todos</a></li>
+                    <li class="nav-header">Relatórios</li>
+                    <li><a href="/gerenciador_testes/projeto">Ver todos Projetos</a></li> 
+                    <li><a href="#">Relatório1</a></li> 
+                    <li><a href="#">Relatório1</a></li>               
+                </ul>
+            </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span6">        
+            <div class="hero-unit">
+                {% block conteudo %}
+                {% endblock %}
             </div>
           
-            <ul class="nav nav-list">
-              <li class="nav-header">Sidebar</li>
-              <li class="active"><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-              <li><a href="#">Link</a></li>
-            </ul>
-          </div><!--/.well -->
         </div><!--/span-->
-        <div class="span6">
-        
-          <div class="hero-unit">
-            {% block conteudo %}
-            {% endblock %}
-          </div>
-          
-        </div><!--/span-->
-      </div><!--/row-->
-
-      <hr>
-
-      <footer>
-        <p></p>
-      </footer>
-
-    </div><!--/.fluid-container-->
+    </div><!--/row--> 
+</div><!--/.fluid-container-->
     
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>

@@ -1,10 +1,10 @@
 from django.template import Context
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
-from gerenciador_testes.models import casoDeTeste, casoDeTestePasso
+from gerenciador_testes.models import casoDeTeste, casoDeTestePasso, projeto
 from django.shortcuts import render_to_response
 from django.contrib import auth
-from forms import CasoDeTesteForm
+from forms import CasoDeTesteForm, ProjetoForm
 from django.utils.datastructures import MultiValueDictKeyError
 import subprocess
 
@@ -16,15 +16,45 @@ def logoutRequest(request):
     # Redirect to a success page.
     return HttpResponseRedirect('/gerenciador_testes/login')    
 
+def lista_projeto(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/gerenciador_testes/login')
+    
+    form_has_any_error = False
+    
+    listaProjetos = projeto.objects.all()
+    if request.method == 'POST':                # If the form has been submitted...
+        formProj = ProjetoForm(request.POST)        # A form bound to the POST data
+        if formProj.is_valid():                     # All validation rules pass
+            nome_post = formProj.cleaned_data['nomeProjeto']
+            data_post = formProj.cleaned_data['dataAbertura']
+            projeto_obj = projeto(nomeProjeto=nome_post, dataAbertura=data_post)
+            projeto_obj.save()
+            return HttpResponseRedirect('../../gerenciador_testes/projeto')
+        else:
+            form_has_any_error = True
+    else:    
+        formProj = ProjetoForm()
+    
+    c = Context({
+                 'listaProjetos': listaProjetos,
+                 'formProj': formProj,
+                 'form_has_any_errors' : form_has_any_error,
+    })
+        
+    return render_to_response('gerenciador_testes/projeto.html',
+                              c,
+                              context_instance=RequestContext(request))
+
 def principal(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
     
     form_has_any_error = False
     
-    listaCasoTestes = casoDeTeste.objects.all()        
-    if request.method == 'POST':  # If the form has been submitted...
-        form = CasoDeTesteForm(request.POST)  # A form bound to the POST data
+    listaCasoTestes = casoDeTeste.objects.all()
+    if request.method == 'POST':                # If the form has been submitted...
+        form = CasoDeTesteForm(request.POST)    # A form bound to the POST data
         if form.is_valid():  # All validation rules pass
             titulo_post = form.cleaned_data['titulo']
             caminho_post = form.cleaned_data['caminhoSikuli']
@@ -44,8 +74,7 @@ def principal(request):
         
     return render_to_response('gerenciador_testes/principal.html',
                               c,
-                              context_instance=RequestContext(request))
-    
+                              context_instance=RequestContext(request))    
 
 def registra_cancelar (request, casoDeTeste_id):    
     return HttpResponseRedirect('/gerenciador_testes/principal')
