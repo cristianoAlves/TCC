@@ -8,5 +8,5 @@ class CasoDeTesteForm(forms.Form):
     caminhoSikuli = forms.CharField(max_length=200, label=u'Caminho do teste no Sikuli')
     
 class ProjetoForm(forms.Form):    
-    nomeProjeto = forms.CharField(max_length=200, label=u'nome')
-    dataAbertura = forms.DateField(initial=datetime.date.today, label=u'Data_abertura')
+    nomeProjeto = forms.CharField(max_length=200, label=u'Nome')
+    dataAbertura = forms.DateField(initial=datetime.date.today, label=u'Data de abertura')

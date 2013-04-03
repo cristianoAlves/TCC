@@ -32,12 +32,14 @@
     <table class="table table-hover">
         <tr>
             <th WIDTH="5%">#</th>
-            <th WIDTH="80%">Nome</th>
-            <th WIDTH="15%" colspan="3" style="text-align: center">Ações</th>                    
+            <th WIDTH="40%">Nome</th>
+            <th WIDTH="35%" style="text-align: center">Data Abertura</th>
+            <th WIDTH="20%" colspan="3" style="text-align: center">Ações</th>                    
             {% for projeto in listaProjetos %}
                 <tr>
                     <td> {{ projeto.id }}</td>
                     <td> <a href="/gerenciador_testes/projeto/{{ projeto.id }}/">{{ projeto.nomeProjeto }}</a></td>
+                    <td style="text-align: center"> {{ projeto.dataAbertura }} </td>
                     <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/editar/{{ projeto.id }}/" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
                     <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/deletar/{{ projeto.id }}/" data-toggle="tooltip" title="Deletar"><i class="icon-trash"></i></a></td>
                     <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/adicionarTestes/{{ projeto.id }}/" data-toggle="tooltip" title="Adicionar Teste"><i class="icon-plus"></i></a></td>
