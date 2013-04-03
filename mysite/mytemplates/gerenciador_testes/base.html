@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>{% block titulo %}Insert title here{% endblock %}</title>
+<title>{% block titulo %}Gerenciador de Testes{% endblock %}</title>
 <!-- Bootstrap -->
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <style type="text/css">
@@ -28,7 +28,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/gerenciador_testes/principal/">Gerenciador de Testes</a>
+          <a class="brand" href="/gerenciador_testes/projeto/1/visao_geral/">Gerenciador de Testes</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">            
               Usuário: {{ user.username }},  <a href="/gerenciador_testes/logout/" class="navbar-link">Sair</a>            
@@ -68,10 +68,10 @@
                     <li class="nav-header">Projeto</li>
                     <li><a href="/gerenciador_testes/projeto/1/visao_geral/">Visão Geral</a></li>
                     <li class="nav-header">Casos de Teste</li>
-                    <li><a href="/gerenciador_testes/principal/">Ver Todos</a></li>
+                    <li><a href="/gerenciador_testes/projeto/1/testes_no_projeto/">Ver Todos</a></li>
                     <li class="nav-header">Relatórios</li>
                     <li><a href="/gerenciador_testes/projeto">Ver todos Projetos</a></li> 
-                    <li><a href="#">Relatório1</a></li> 
+                    <li><a href="/gerenciador_testes/projeto/testes_no_projeto/">Ver todos Testes</a></li> 
                     <li><a href="#">Relatório1</a></li>               
                 </ul>
             </div><!--/.well -->

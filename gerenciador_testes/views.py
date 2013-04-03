@@ -23,7 +23,7 @@ def lista_projeto(request):
     form_has_any_error = False
     
     listaProjetos = projeto.objects.all()
-    if request.method == 'POST':                # If the form has been submitted...
+    if request.method == 'POST':                    # If the form has been submitted...
         formProj = ProjetoForm(request.POST)        # A form bound to the POST data
         if formProj.is_valid():                     # All validation rules pass
             nome_post = formProj.cleaned_data['nomeProjeto']
@@ -46,21 +46,27 @@ def lista_projeto(request):
                               c,
                               context_instance=RequestContext(request))
 
-def principal(request):
+def testes_no_projeto(request, projeto_id=0):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
     
-    form_has_any_error = False
+    form_has_any_error = False    
     
-    listaCasoTestes = casoDeTeste.objects.all()
+    if projeto_id == 0:
+        listaCasoTestes = casoDeTeste.objects.all()
+        meuProjeto = False
+    else:
+        listaCasoTestes = casoDeTeste.objects.filter(casodetesteemprojeto__projeto__exact=projeto_id)
+        meuProjeto = projeto.objects.get(pk=projeto_id).nomeProjeto + ' - '
+       
     if request.method == 'POST':                # If the form has been submitted...
         form = CasoDeTesteForm(request.POST)    # A form bound to the POST data
-        if form.is_valid():  # All validation rules pass
+        if form.is_valid():                     # All validation rules pass
             titulo_post = form.cleaned_data['titulo']
             caminho_post = form.cleaned_data['caminhoSikuli']
             casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
             casoDeTeste_obj.save()
-            return HttpResponseRedirect('../../gerenciador_testes/principal')
+            return HttpResponseRedirect('../../gerenciador_testes/visao_geral')
         else:
             form_has_any_error = True
     else:    
@@ -70,6 +76,7 @@ def principal(request):
                  'listaCasoTestes': listaCasoTestes,
                  'form': form,
                  'form_has_any_errors' : form_has_any_error,
+                 'meuProjeto': meuProjeto,
     })
         
     return render_to_response('gerenciador_testes/principal.html',
@@ -101,7 +108,6 @@ def detail(request, casoDeTeste_id):
         return HttpResponseRedirect('/gerenciador_testes/login')
     
     listaDePassos = casoDeTestePasso.objects.filter(casoDeTeste__exact=casoDeTeste_id)
-    # casoTesteNome = casoDeTeste.objects.get(pk=casoDeTeste_id).titulo
     casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
     ex = None
     
