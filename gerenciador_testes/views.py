@@ -1,7 +1,7 @@
 from django.template import Context
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
-from gerenciador_testes.models import casoDeTeste, casoDeTestePasso, projeto
+from gerenciador_testes.models import casoDeTeste, casoDeTestePasso, projeto, casoDeTesteEmProjeto
 from django.shortcuts import render_to_response
 from django.contrib import auth
 from forms import CasoDeTesteForm, ProjetoForm
@@ -121,3 +121,26 @@ def detail(request, casoDeTeste_id):
                               c,
                               context_instance=RequestContext(request))
     
+def visao_geral(request, projeto_id=1):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/gerenciador_testes/login')
+    
+    meuProjeto = projeto.objects.get(pk=projeto_id)
+    totalProjetos = projeto.objects.all().count()
+    totalTesteEmProjeto = casoDeTeste.objects.filter(casodetesteemprojeto__projeto__exact=projeto_id).count()
+    ultimaExecucao = 'falhou'
+    acumuladoFalhas = '5.7%'
+    acumuladoSucesso = '94.3%'
+    
+    c = Context({
+                 'meuProjeto': meuProjeto,
+                 'totalProjetos': totalProjetos,
+                 'totalTesteEmProjeto': totalTesteEmProjeto,
+                 'ultimaExecucao' : ultimaExecucao,
+                 'acumuladoFalhas': acumuladoFalhas,
+                 'acumuladoSucesso': acumuladoSucesso,
+    })
+        
+    return render_to_response('gerenciador_testes/visao_geral.html',
+                              c,
+                              context_instance=RequestContext(request))
