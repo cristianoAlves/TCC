@@ -23,9 +23,9 @@ def lista_projeto(request):
     form_has_any_error = False
     
     listaProjetos = projeto.objects.all()
-    if request.method == 'POST':                    # If the form has been submitted...
-        formProj = ProjetoForm(request.POST)        # A form bound to the POST data
-        if formProj.is_valid():                     # All validation rules pass
+    if request.method == 'POST':  # If the form has been submitted...
+        formProj = ProjetoForm(request.POST)  # A form bound to the POST data
+        if formProj.is_valid():  # All validation rules pass
             nome_post = formProj.cleaned_data['nomeProjeto']
             data_post = formProj.cleaned_data['dataAbertura']
             projeto_obj = projeto(nomeProjeto=nome_post, dataAbertura=data_post)
@@ -59,9 +59,9 @@ def testes_no_projeto(request, projeto_id=0):
         listaCasoTestes = casoDeTeste.objects.filter(casodetesteemprojeto__projeto__exact=projeto_id)
         meuProjeto = projeto.objects.get(pk=projeto_id).nomeProjeto + ' - '
        
-    if request.method == 'POST':                # If the form has been submitted...
-        form = CasoDeTesteForm(request.POST)    # A form bound to the POST data
-        if form.is_valid():                     # All validation rules pass
+    if request.method == 'POST':  # If the form has been submitted...
+        form = CasoDeTesteForm(request.POST)  # A form bound to the POST data
+        if form.is_valid():  # All validation rules pass
             titulo_post = form.cleaned_data['titulo']
             caminho_post = form.cleaned_data['caminhoSikuli']
             casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
@@ -84,7 +84,7 @@ def testes_no_projeto(request, projeto_id=0):
                               context_instance=RequestContext(request))    
 
 def registra_cancelar (request, casoDeTeste_id):    
-    return HttpResponseRedirect('/gerenciador_testes/principal')
+    return HttpResponseRedirect('/gerenciador_testes/projeto/1/testes_no_projeto/')
 
 def registra_passou (request, casoDeTeste_id):    
     return HttpResponseRedirect('/gerenciador_testes/principal')
@@ -94,7 +94,8 @@ def registra_falhou (request, casoDeTeste_id):
 
 def registra_sikuli (request, casoDeTeste_id):
     casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
-    sikuliPath = 'C:\\"Program Files (x86)\\Sikuli X\\Sikuli-IDE.bat" -r '
+    sikuliPath = 'c:\\"Program Files (x86)\\Sikuli X\\Sikuli-IDE.bat" -r '
+    # caminhoTesteSikuli = '"d:\\Dropbox\\My_Saved_data\\Faculdade\\TCC I\\Sikuli\\demo\\demo.sikuli"'
     caminhoTesteSikuli = casoTeste.caminhoSikuli
     subprocess.Popen(sikuliPath + caminhoTesteSikuli, shell=True)
     
