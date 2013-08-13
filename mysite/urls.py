@@ -25,6 +25,7 @@ urlpatterns = patterns('',
     
     # lista de projetos
     url(r'^gerenciador_testes/projeto/$', 'gerenciador_testes.views.lista_projeto'),
+    url(r'^gerenciador_testes/(?P<casoDeTeste_id>\d+)/deletar$', 'gerenciador_testes.views.remover_teste'),
     
     # controle de execucao   
     url(r'^gerenciador_testes/(?P<casoDeTeste_id>\d+)/$', 'gerenciador_testes.views.detail'),

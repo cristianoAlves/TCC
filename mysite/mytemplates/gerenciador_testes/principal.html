@@ -65,8 +65,8 @@
             <tr>
                 <td>{{forloop.counter}}</td>
                 <td> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/">{{ casoDeTeste.titulo }}</a></td>
-                <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/editar/" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
-                <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/deletar/" data-toggle="tooltip" title="Deletar"><i class="icon-trash"></i></a></td>                
+                <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/editar" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
+                <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/deletar" data-toggle="tooltip" title="Deletar"><i class="icon-trash"></i></a></td>                
             </tr>
             {% endfor %}
         {% endif %}

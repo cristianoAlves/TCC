@@ -42,7 +42,7 @@ class casoDeTesteEmProjeto(models.Model):
     casoDeTeste_id = models.ForeignKey(casoDeTeste)
     
     def __unicode__(self):
-        return u'Projeto: %s, Caso de Teste: %s' % (self.projeto.nomeProjeto, self.casoDeTeste.titulo)
+        return u'Projeto: %s, Caso de Teste: %s' % (self.projeto_id.nomeProjeto, self.casoDeTeste_id.titulo)
     
 
 
