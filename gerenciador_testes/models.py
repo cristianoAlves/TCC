@@ -38,8 +38,8 @@ class projeto(models.Model):
         verbose_name_plural = u'Projetos'
 
 class casoDeTesteEmProjeto(models.Model):
-    projeto = models.ForeignKey(projeto)
-    casoDeTeste = models.ForeignKey(casoDeTeste)
+    projeto_id = models.ForeignKey(projeto)
+    casoDeTeste_id = models.ForeignKey(casoDeTeste)
     
     def __unicode__(self):
         return u'Projeto: %s, Caso de Teste: %s' % (self.projeto.nomeProjeto, self.casoDeTeste.titulo)

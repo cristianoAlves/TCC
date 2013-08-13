@@ -54,10 +54,12 @@ def testes_no_projeto(request, projeto_id=0):
     
     if projeto_id == 0:
         listaCasoTestes = casoDeTeste.objects.all()
-        meuProjeto = False
+        meuProjetoNome = False
     else:
-        listaCasoTestes = casoDeTeste.objects.filter(casodetesteemprojeto__projeto__exact=projeto_id)
-        meuProjeto = projeto.objects.get(pk=projeto_id).nomeProjeto + ' - '
+        listaCasoTestes = casoDeTeste.objects.filter(casodetesteemprojeto__projeto_id__exact=projeto_id)
+        meuProjeto = projeto.objects.get(pk=projeto_id)
+        meuProjetoNome = meuProjeto.nomeProjeto + ' - '
+        
        
     if request.method == 'POST':  # If the form has been submitted...
         form = CasoDeTesteForm(request.POST)  # A form bound to the POST data
@@ -66,7 +68,13 @@ def testes_no_projeto(request, projeto_id=0):
             caminho_post = form.cleaned_data['caminhoSikuli']
             casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
             casoDeTeste_obj.save()
-            return HttpResponseRedirect('../../gerenciador_testes/visao_geral')
+            # Se o projeto for passado, insere tabem o teste no projeto
+            if projeto_id != 0:
+                # print ("Caso de teste id: " + str(casoDeTeste_id.id))
+                # print ("Projeto id: " + projeto_id)
+                casoDeTesteEmProjeto_obj = casoDeTesteEmProjeto(projeto_id=projeto.objects.get(pk=projeto_id), casoDeTeste_id=casoDeTeste.objects.latest('id'))
+                casoDeTesteEmProjeto_obj.save()
+            return HttpResponseRedirect('/gerenciador_testes/projeto/1/testes_no_projeto/')
         else:
             form_has_any_error = True
     else:    
@@ -76,6 +84,7 @@ def testes_no_projeto(request, projeto_id=0):
                  'listaCasoTestes': listaCasoTestes,
                  'form': form,
                  'form_has_any_errors' : form_has_any_error,
+                 'meuProjetoNome': meuProjetoNome,
                  'meuProjeto': meuProjeto,
     })
         
@@ -127,14 +136,18 @@ def detail(request, casoDeTeste_id):
     return render_to_response('gerenciador_testes/detail.html',
                               c,
                               context_instance=RequestContext(request))
-    
+def remover_do_projeto(request, projeto_id, casoDeTeste_id):
+    casoDeTesteEmProjeto_obj = casoDeTesteEmProjeto(projeto_id=projeto.objects.get(pk=projeto_id), casoDeTeste_id=casoDeTeste.objects.get(pk=casoDeTeste_id))
+    casoDeTesteEmProjeto_obj.delete()
+    return HttpResponseRedirect('/gerenciador_testes/projeto/1/testes_no_projeto')
+
 def visao_geral(request, projeto_id=1):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
     
     meuProjeto = projeto.objects.get(pk=projeto_id)
     totalProjetos = projeto.objects.all().count()
-    totalTesteEmProjeto = casoDeTeste.objects.filter(casodetesteemprojeto__projeto__exact=projeto_id).count()
+    totalTesteEmProjeto = casoDeTeste.objects.filter(casodetesteemprojeto__projeto_id__exact=projeto_id).count()
     ultimaExecucao = 'falhou'
     acumuladoFalhas = '5.7%'
     acumuladoSucesso = '94.3%'

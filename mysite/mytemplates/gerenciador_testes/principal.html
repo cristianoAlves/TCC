@@ -5,8 +5,8 @@
 
 
 <div style="display:block">
-    {% if meuProjeto %}
-        <h3 style="float:left">{{meuProjeto}}Casos de testes</h3>
+    {% if meuProjetoNome %}
+        <h3 style="float:left">{{meuProjetoNome}}Casos de testes</h3>
     {% else %}
         <h3 style="float:left">Casos de testes</h3>   
     {% endif %} 
@@ -40,7 +40,7 @@
     <!-- Verifica se o projeto esta sendo passado por parâmetro, caso não mostra a lista geral de testes 
          Na opção lista geral, não mostra o botão de executar 
     -->
-        {% if meuProjeto %}
+        {% if meuProjetoNome %}
 	        <tr>
 	            <th WIDTH="5%">#</th>
 	            <th WIDTH="80%">Nome</th>
@@ -51,7 +51,7 @@
                 <td>{{forloop.counter}}</td>
                 <td> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/">{{ casoDeTeste.titulo }}</a></td>
                 <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/editar/" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
-                <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/remover_do_projeto/" data-toggle="tooltip" title="Remover do projeto"><i class="icon-remove-circle"></i></a></td>
+                <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{meuProjeto.id}}/{{ casoDeTeste.id }}/remover_do_projeto" data-toggle="tooltip" title="Remover do projeto"><i class="icon-remove-circle"></i></a></td>
                 <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/?executar" data-toggle="tooltip" title="Executar"><i class="icon-play"></i></a></td>
             </tr>
             {% endfor %}
