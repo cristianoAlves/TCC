@@ -13,7 +13,12 @@
        
     
     <div class="btn-group" style="float:right; margin-top:15px">
-        <a href="#myModal" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>
+        {% if meuProjetoNome %}
+            <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/lista_testes_para_inserir_no_projeto" role= "button" class="btn"><i class="icon-plus"></i></a>
+        {% else %}
+            <a href="#myModal" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>
+    {% endif %}
+        
     </div>
 </div>
             
@@ -41,11 +46,11 @@
          Na opção lista geral, não mostra o botão de executar 
     -->
         {% if meuProjetoNome %}
-	        <tr>
-	            <th WIDTH="5%">#</th>
-	            <th WIDTH="80%">Nome</th>
-	            <th WIDTH="15%" colspan="3" style="text-align: center">Ações</th>
-	        </tr>        
+            <tr>
+                <th WIDTH="5%">#</th>
+                <th WIDTH="80%">Nome</th>
+                <th WIDTH="15%" colspan="3" style="text-align: center">Ações</th>
+            </tr>        
             {% for casoDeTeste in listaCasoTestes %}
             <tr>
                 <td>{{forloop.counter}}</td>
@@ -56,11 +61,11 @@
             </tr>
             {% endfor %}
         {% else %}
-	        <tr>
-	            <th WIDTH="5%">#</th>
-	            <th WIDTH="80%">Nome</th>
-	            <th WIDTH="15%" colspan="2" style="text-align: center">Ações</th>
-	        </tr> 
+            <tr>
+                <th WIDTH="5%">#</th>
+                <th WIDTH="80%">Nome</th>
+                <th WIDTH="15%" colspan="2" style="text-align: center">Ações</th>
+            </tr> 
             {% for casoDeTeste in listaCasoTestes %}
             <tr>
                 <td>{{forloop.counter}}</td>

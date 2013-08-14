@@ -68,13 +68,7 @@ def testes_no_projeto(request, projeto_id=0):
             titulo_post = form.cleaned_data['titulo']
             caminho_post = form.cleaned_data['caminhoSikuli']
             casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
-            casoDeTeste_obj.save()
-
-            # Se o projeto for passado, insere tambem o teste no projeto
-            if projeto_id != 0:
-                casoDeTesteEmProjeto_obj = casoDeTesteEmProjeto(projeto_id=projeto.objects.get(pk=projeto_id), casoDeTeste_id=casoDeTeste.objects.latest('id'))
-                casoDeTesteEmProjeto_obj.save()
-            return HttpResponseRedirect('/gerenciador_testes/projeto/1/testes_no_projeto/')
+            casoDeTeste_obj.save()            
         else:
             form_has_any_error = True
     else:    
@@ -138,6 +132,31 @@ def detail(request, casoDeTeste_id):
 def remover_do_projeto(request, projeto_id, casoDeTeste_id):    
     casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).delete()
     return HttpResponseRedirect('/gerenciador_testes/projeto/1/testes_no_projeto')
+
+def lista_testes_para_inserir_no_projeto(request, projeto_id):
+    if request.method == 'POST':
+        checkbox = request.POST.getlist('checks')
+        #print ("tamanho da lista: " + str(len(checkbox)))
+        #for c in checkbox:
+        #    print ("valor: " + c)
+        #adiciona os testes no projeto
+        for c in checkbox:
+            print ("inserindo teste id: " + str(c))
+            casoDeTesteEmProjeto_obj = casoDeTesteEmProjeto(projeto_id=projeto.objects.get(pk=projeto_id), casoDeTeste_id=casoDeTeste.objects.get(pk=c))
+            casoDeTesteEmProjeto_obj.save()
+
+    #Prepara lista de testes para o projeto
+    listaCasoTestes = casoDeTeste.objects.all().exclude(casodetesteemprojeto__projeto_id__exact=projeto_id)
+    meuProjeto = projeto.objects.get(pk=projeto_id)
+    
+    #Seta o contexto
+    c = Context({
+                 'listaCasoTestes': listaCasoTestes,
+                 'meuProjeto': meuProjeto,
+    })
+    return render_to_response('gerenciador_testes/lista_testes_inserir_no_projeto.html',
+                              c,
+                              context_instance=RequestContext(request))
 
 def remover_teste(request, casoDeTeste_id):
     #Remove os passos associado ao caso de teste

@@ -1,0 +1,55 @@
+{% extends "gerenciador_testes/base.html" %}
+
+{% block conteudo %}
+
+<div style="display:block">
+    <h3 style="float:left">Inserir testes no Projeto - {{meuProjeto.nomeProjeto}}</h3>
+</div>
+
+{% if listaCasoTestes %}
+    <form name='myForm' method="post" action="">{% csrf_token %}
+        <table class="table table-hover">
+            <tr>
+                <th WIDTH="5%">#</th>
+                <th WIDTH="80%">Nome</th>
+                <th WIDTH="15%" style="text-align: center">Sel.</th>
+            </tr> 
+            {% for casoDeTeste in listaCasoTestes %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/">{{ casoDeTeste.titulo }}</a></td>
+                    <td style="text-align: center"><input type="checkbox" name="checks" value="{{ casoDeTeste.id }}"></td>
+                </tr>
+            {% endfor %}
+        </table>    
+            <div class="btn-toolbar" style="width:100%;  margin: 10px auto 0px auto; text-align: center; padding: 10px 0;">
+                <div class="btn-group">
+                    <button class="btn btn-large" type="submit">Inserir</button>
+                </div>
+                <div class="btn-group">
+                    <a href="testes_no_projeto/" class="btn btn-large">Cancelar</a>
+                </div>
+            </div>
+    </form>
+{% else %}
+    <div class="alert alert-warning" style="float:left; margin-top:20px">
+    <div style="display:block">        
+        <a href="/gerenciador_testes/projeto/1/testes_no_projeto/" role="button" class="close" data-dismiss="alert">&times;</a>
+        <p>&nbsp;&nbsp;Sem Casos de Testes para o Projeto.</p>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block meuscript %}
+$(document).ready(function() {
+    {% if form_has_any_errors %}
+        $('#myModal').modal('show');
+    {% endif %}
+});
+
+function limpaCamposAdicionaTesteCase()
+{
+    window.location = '.';
+}   
+{% endblock %}

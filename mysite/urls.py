@@ -19,9 +19,11 @@ urlpatterns = patterns('',
     # testes por projeto e geral
     url(r'^gerenciador_testes/projeto/testes_no_projeto/', 'gerenciador_testes.views.testes_no_projeto'),
     url(r'^gerenciador_testes/projeto/(?P<projeto_id>\d+)/testes_no_projeto/', 'gerenciador_testes.views.testes_no_projeto'),
+    url(r'^gerenciador_testes/projeto/(?P<projeto_id>\d+)/lista_testes_para_inserir_no_projeto$', 'gerenciador_testes.views.lista_testes_para_inserir_no_projeto'),
     
     # crud de casos de testes
     url(r'^gerenciador_testes/(?P<projeto_id>\d+)/(?P<casoDeTeste_id>\d+)/remover_do_projeto$', 'gerenciador_testes.views.remover_do_projeto'),
+    
     
     # lista de projetos
     url(r'^gerenciador_testes/projeto/$', 'gerenciador_testes.views.lista_projeto'),
