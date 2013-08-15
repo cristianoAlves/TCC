@@ -32,7 +32,7 @@
 {% block conteudo %}
 
 {% if user.is_authenticated %}
-    <meta HTTP-EQUIV="REFRESH" content="0; url=/gerenciador_testes/visao_geral/">
+    <meta HTTP-EQUIV="REFRESH" content="0; url=/gerenciador_testes/projeto/1">
 {% endif %}
 
 <div class="container">
@@ -50,12 +50,12 @@
 	   {{ form.password }}</p>
 	   
 	   <!--  server para redirecionar depois do login -->
-	   <input type="hidden" name="next" value="/gerenciador_testes/visao_geral/" />
+	   <input type="hidden" name="next" value="/gerenciador_testes/projeto/1" />
 	   
 	   <label class="checkbox">
             <input type="checkbox" value="remember-me"> lembrar?
         </label>
-        <button class="btn btn-large btn-primary" type="submit" value="login">entrar</button>	   
+        <button class="btn btn-large btn-primary" type="submit" value="login">entrar</button>
 	</form>
 </div> <!-- /container -->
 {% endblock %}

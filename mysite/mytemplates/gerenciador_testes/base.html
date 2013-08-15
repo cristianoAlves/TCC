@@ -13,8 +13,6 @@
       .sidebar-nav {
         padding: 9px 0;
       }
-      
-      
 </style>
 
 
@@ -30,15 +28,15 @@
           </a>
           <a class="brand" href="/gerenciador_testes/projeto/1/visao_geral/">Gerenciador de Testes</a>
           <div class="nav-collapse collapse">
-            <p class="navbar-text pull-right">            
-              Usuário: {{ user.username }},  <a href="/gerenciador_testes/logout/" class="navbar-link">Sair</a>            
-            </p>            
+            <p class="navbar-text pull-right">
+                Usuário: {{ user.username }},  <a href="/gerenciador_testes/logout/" class="navbar-link">Sair</a>            
+            </p>
           </div><!--/.nav-collapse -->
         </div>
     </div>
 </div>
 
-    
+
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span3">
@@ -51,43 +49,40 @@
                         <ul class="nav" role="navigation">
                             <li class="dropdown">
                                 <h4 id="drop1" class="dropdown-toggle" data-toggle="dropdown">Escolha o Projeto <b class="caret"></b></h4>
-                                <h5>Projeto 1</h5>
+                                <h5>{{ meuProjeto.nomeProjeto }}</h5>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="drop1">
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="/gerenciador_testes/projeto/1/visao_geral/">Projeto 1</a></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Projeto 2</a></li>
-                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Projeto 3</a></li>
+                                {% for projeto in listaProjetos %}
+                                    <li role="presentation"><a role="menuitem" tabindex="-1" href="{% url url_visao_geral projeto.id %}">{{ projeto.nomeProjeto }}</a></li>
+                                {% endfor %}
                                 </ul>
                             </li>
                         </ul>
                     </div>
                 </div>
                 </br>
- 
-          
+
                 <ul class="nav nav-list">
                     <li class="nav-header">Projeto</li>
-                    <li><a href="/gerenciador_testes/projeto/1/visao_geral/">Visão Geral</a></li>
+                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/visao_geral/">Visão Geral</a></li>
                     <li class="nav-header">Casos de Teste</li>
-                    <li><a href="/gerenciador_testes/projeto/1/testes_no_projeto/">Ver Todos</a></li>
-                    <li><a href="/gerenciador_testes/projeto/1/execucoes_por_projeto/">Ver Execuções</a></li>
+                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/testes_no_projeto/">Ver Todos</a></li>
+                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/execucoes_por_projeto/">Ver Execuções</a></li>
                     <li class="nav-header">Relatórios</li>
                     <li><a href="/gerenciador_testes/projeto">Ver todos Projetos</a></li> 
                     <li><a href="/gerenciador_testes/projeto/testes_no_projeto/">Ver todos Testes</a></li> 
                     <li><a href="/gerenciador_testes/projeto/execucoes_todas/">Ver todas Execuções</a></li> 
-                    <li><a href="#">Relatório1</a></li>               
+                    <li><a href="#">Relatório1</a></li>
                 </ul>
             </div><!--/.well -->
         </div><!--/span-->
-        <div class="span6">        
+        <div class="span6">
             <div class="hero-unit">
                 {% block conteudo %}
                 {% endblock %}
             </div>
-          
         </div><!--/span-->
     </div><!--/row--> 
 </div><!--/.fluid-container-->
-    
 
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
