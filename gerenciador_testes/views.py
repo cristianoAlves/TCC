@@ -46,6 +46,8 @@ def lista_projeto(request):
                               c,
                               context_instance=RequestContext(request))
 
+#TODO:    - remover a parte que insere testes
+#         - mudar o nome da view para lista_casos_teste_por_projeto
 def testes_no_projeto(request, projeto_id=0):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
