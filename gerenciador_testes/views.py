@@ -16,13 +16,14 @@ def logoutRequest(request):
     # Redirect to a success page.
     return HttpResponseRedirect('/gerenciador_testes/login')
 
-def lista_projeto(request):
+def lista_projeto(request, projeto_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
 
     form_has_any_error = False
 
     listaProjetos = projeto.objects.all()
+    meuProjeto = projeto.objects.get(pk=projeto_id)
     if request.method == 'POST':  # If the form has been submitted
         formProj = ProjetoForm(request.POST)  # A form bound to the POST data
         if formProj.is_valid():  # All validation rules pass
@@ -38,6 +39,7 @@ def lista_projeto(request):
 
     c = Context({
                  'listaProjetos': listaProjetos,
+                 'meuProjeto': meuProjeto,
                  'formProj': formProj,
                  'form_has_any_errors' : form_has_any_error,
     })
@@ -48,21 +50,35 @@ def lista_projeto(request):
 
 #TODO:    - remover a parte que insere testes
 #         - mudar o nome da view para lista_casos_teste_por_projeto
-def testes_no_projeto(request, projeto_id=0):
+def lista_casos_teste_por_projeto(request, projeto_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
-    
-    form_has_any_error = False
-    
-    if projeto_id == 0:
-        listaCasoTestes = casoDeTeste.objects.all()
-        meuProjetoNome = False
-        meuProjeto = 0
-    else:
-        listaCasoTestes = casoDeTeste.objects.filter(casodetesteemprojeto__projeto_id__exact=projeto_id)
-        meuProjeto = projeto.objects.get(pk=projeto_id)
-        meuProjetoNome = meuProjeto.nomeProjeto + ' - '
 
+    listaCasoTestes = casoDeTeste.objects.filter(casodetesteemprojeto__projeto_id__exact=projeto_id)
+    listaProjetos = projeto.objects.all()
+    meuProjeto = projeto.objects.get(pk=projeto_id)
+    meuProjetoNome = meuProjeto.nomeProjeto + ' - '
+
+    c = Context({
+                 'listaCasoTestes': listaCasoTestes,
+                 'listaProjetos' : listaProjetos,
+                 'meuProjetoNome': meuProjetoNome,
+                 'meuProjeto': meuProjeto,
+    })
+
+    return render_to_response('gerenciador_testes/principal.html',
+                              c,
+                              context_instance=RequestContext(request))
+
+def lista_todos_casos_testes(request, projeto_id):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/gerenciador_testes/login')
+
+    form_has_any_error = False
+    listaCasoTestes = casoDeTeste.objects.all()
+    listaProjetos = projeto.objects.all()
+    meuProjeto = projeto.objects.get(pk=projeto_id)
+    meuProjetoNome = False
 
     if request.method == 'POST':  # If the form has been submitted
         form = CasoDeTesteForm(request.POST)  # A form bound to the POST data
@@ -75,15 +91,16 @@ def testes_no_projeto(request, projeto_id=0):
             form_has_any_error = True
     else:    
         form = CasoDeTesteForm()
-    
+
     c = Context({
                  'listaCasoTestes': listaCasoTestes,
+                 'listaProjetos' : listaProjetos,
                  'form': form,
                  'form_has_any_errors' : form_has_any_error,
                  'meuProjetoNome': meuProjetoNome,
                  'meuProjeto': meuProjeto,
     })
-
+    
     return render_to_response('gerenciador_testes/principal.html',
                               c,
                               context_instance=RequestContext(request))
