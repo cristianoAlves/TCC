@@ -8,23 +8,22 @@
     {% if meuProjetoNome %}
         <h3 style="float:left">{{meuProjetoNome}}Casos de testes</h3>
     {% else %}
-        <h3 style="float:left">Casos de testes</h3>   
+        <h3 style="float:left">Casos de testes</h3>
     {% endif %} 
-       
-    
+
     <div class="btn-group" style="float:right; margin-top:15px">
         {% if meuProjetoNome %}
             <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/lista_testes_para_inserir_no_projeto" role= "button" class="btn"><i class="icon-plus"></i></a>
         {% else %}
             <a href="#myModal" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>
     {% endif %}
-        
+
     </div>
 </div>
-            
+
 <!-- Modal -->
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">    
-    <form name='myForm' method="post" action="">{% csrf_token %}        
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form name='myForm' method="post" action="">{% csrf_token %}
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" action="">×</button>
             <h3 id="myModalLabel">Adicionar um Caso de Teste</h3>
@@ -32,7 +31,7 @@
         <div class="modal-body">
             {{ form.as_p }}
         </div> 
-        <div class="modal-footer">            
+        <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="limpaCamposAdicionaTesteCase()">Limpar</button>
             <button class="btn btn-primary" type="submit">Salvar</button>
         </div>
@@ -41,7 +40,6 @@
 
 {% if listaCasoTestes %}
     <table class="table table-hover">
-    
     <!-- Verifica se o projeto esta sendo passado por parâmetro, caso não mostra a lista geral de testes 
          Na opção lista geral, não mostra o botão de executar 
     -->
@@ -50,13 +48,13 @@
                 <th WIDTH="5%">#</th>
                 <th WIDTH="80%">Nome</th>
                 <th WIDTH="15%" colspan="3" style="text-align: center">Ações</th>
-            </tr>        
+            </tr>
             {% for casoDeTeste in listaCasoTestes %}
             <tr>
                 <td>{{forloop.counter}}</td>
                 <td> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/">{{ casoDeTeste.titulo }}</a></td>
                 <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/editar/" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
-                <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{meuProjeto.id}}/{{ casoDeTeste.id }}/remover_do_projeto" data-toggle="tooltip" title="Remover do projeto"><i class="icon-remove-circle"></i></a></td>
+                <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes/{{ casoDeTeste.id }}/remover_do_projeto" data-toggle="tooltip" title="Remover do projeto"><i class="icon-remove-circle"></i></a></td>
                 <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/?executar" data-toggle="tooltip" title="Executar"><i class="icon-play"></i></a></td>
             </tr>
             {% endfor %}
@@ -69,9 +67,9 @@
             {% for casoDeTeste in listaCasoTestes %}
             <tr>
                 <td>{{forloop.counter}}</td>
-                <td> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/">{{ casoDeTeste.titulo }}</a></td>
+                <td> <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes/{{ casoDeTeste.id }}">{{ casoDeTeste.titulo }}</a></td>
                 <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/editar" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
-                <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/{{ casoDeTeste.id }}/deletar" data-toggle="tooltip" title="Deletar"><i class="icon-trash"></i></a></td>                
+                <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes/{{ casoDeTeste.id }}/deletar" data-toggle="tooltip" title="Deletar"><i class="icon-trash"></i></a></td>
             </tr>
             {% endfor %}
         {% endif %}
@@ -85,11 +83,11 @@
 $(document).ready(function() {
     {% if form_has_any_errors %}
         $('#myModal').modal('show');
-    {% endif %}    
+    {% endif %}
 });
 
 function limpaCamposAdicionaTesteCase()
 {
     window.location = '.';
-}   
+}
 {% endblock %}

@@ -10,10 +10,10 @@
         <a href="#myModal" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>
     </div>
 </div>
-            
+
 <!-- Modal -->
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">    
-    <form name='myForm' method="post" action="">{% csrf_token %}        
+<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <form name='myForm' method="post" action="">{% csrf_token %}
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" action="">×</button>
             <h3 id="myModalLabel">Adicionar um Projeto</h3>
@@ -21,7 +21,7 @@
         <div class="modal-body">
             {{ formProj.as_p }}
         </div> 
-        <div class="modal-footer">            
+        <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="limpaCamposAdicionaTesteCase()">Limpar</button>
             <button class="btn btn-primary" type="submit">Salvar</button>
         </div>
@@ -34,7 +34,7 @@
             <th WIDTH="5%">#</th>
             <th WIDTH="40%">Nome</th>
             <th WIDTH="35%" style="text-align: center">Data Abertura</th>
-            <th WIDTH="20%" colspan="3" style="text-align: center">Ações</th>                    
+            <th WIDTH="20%" colspan="3" style="text-align: center">Ações</th>
             {% for projeto in listaProjetos %}
                 <tr>
                     <td>{{forloop.counter}}</td>
@@ -55,12 +55,12 @@
 {% block meuscript %}
 $(document).ready(function() {
     {% if form_has_any_errors %}
-        $('#myModal').modal('show');        
-    {% endif %}    
+        $('#myModal').modal('show');
+    {% endif %}
 });
 
 function limpaCamposAdicionaTesteCase()
 {
     window.location = '.';
-}   
+}
 {% endblock %}

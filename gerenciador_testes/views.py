@@ -10,13 +10,12 @@ import subprocess
 
 
 
-
 def logoutRequest(request):
     auth.logout(request)
     # Redirect to a success page.
     return HttpResponseRedirect('/gerenciador_testes/login')
 
-def lista_projeto(request, projeto_id):
+def lista_projetos(request, projeto_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
 
@@ -48,8 +47,6 @@ def lista_projeto(request, projeto_id):
                               c,
                               context_instance=RequestContext(request))
 
-#TODO:    - remover a parte que insere testes
-#         - mudar o nome da view para lista_casos_teste_por_projeto
 def lista_casos_teste_por_projeto(request, projeto_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
@@ -126,12 +123,14 @@ def registra_sikuli (request, casoDeTeste_id):
     print (sikuliPath + caminhoTesteSikuli)
     return HttpResponseRedirect('/gerenciador_testes/1/?executar')
 
-def detail(request, casoDeTeste_id):
+def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
 
     listaDePassos = casoDeTestePasso.objects.filter(casoDeTeste__exact=casoDeTeste_id)
     casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
+    listaProjetos = projeto.objects.all()
+    meuProjeto = projeto.objects.get(pk=projeto_id)
     ex = None
 
     try:
@@ -143,14 +142,17 @@ def detail(request, casoDeTeste_id):
     c = Context({
         'listaDePassos': listaDePassos,
         'casoTeste': casoTeste,
+        'listaProjetos' : listaProjetos,
+        'meuProjeto' : meuProjeto,
         'ex': ex,
     })
     return render_to_response('gerenciador_testes/detail.html',
                               c,
                               context_instance=RequestContext(request))
+
 def remover_do_projeto(request, projeto_id, casoDeTeste_id):
     casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).delete()
-    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/testes_no_projeto' % (projeto_id))
+    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
 
 def lista_testes_para_inserir_no_projeto(request, projeto_id):
     if request.method == 'POST':
@@ -177,7 +179,7 @@ def lista_testes_para_inserir_no_projeto(request, projeto_id):
                               c,
                               context_instance=RequestContext(request))
 
-def remover_teste(request, casoDeTeste_id):
+def remover_teste(request, projeto_id, casoDeTeste_id):
     #Remove os passos associado ao caso de teste
     casoDeTestePasso.objects.filter(casoDeTeste__exact=casoDeTeste_id).delete()
 
@@ -186,7 +188,8 @@ def remover_teste(request, casoDeTeste_id):
 
     #Remove o caso de teste
     casoDeTeste.objects.get(pk=casoDeTeste_id).delete()
-    return HttpResponseRedirect('/gerenciador_testes/projeto/testes_no_projeto/')
+
+    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes' % (projeto_id))
 
 def visao_geral(request, projeto_id=1):
     if not request.user.is_authenticated():
