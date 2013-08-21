@@ -7,6 +7,7 @@ from django.contrib import auth
 from forms import CasoDeTesteForm, ProjetoForm
 from django.utils.datastructures import MultiValueDictKeyError
 import subprocess
+import datetime
 
 
 
@@ -67,6 +68,9 @@ def lista_casos_teste_por_projeto(request, projeto_id):
                               c,
                               context_instance=RequestContext(request))
 
+def lista_execucoes_por_projeto(request, projeto_id):
+    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/visao_geral' % (projeto_id))
+
 def lista_todos_casos_testes(request, projeto_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
@@ -102,27 +106,6 @@ def lista_todos_casos_testes(request, projeto_id):
                               c,
                               context_instance=RequestContext(request))
 
-def registra_cancelar (request, casoDeTeste_id):
-    return HttpResponseRedirect('/gerenciador_testes/projeto/1/testes_no_projeto/')
-
-def registra_passou (request, casoDeTeste_id):
-    return HttpResponseRedirect('/gerenciador_testes/principal')
-
-def registra_falhou (request, casoDeTeste_id):
-    return HttpResponseRedirect('/gerenciador_testes/principal')
-
-def registra_sikuli (request, casoDeTeste_id):
-    casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
-    sikuliPath = 'c:\\"Program Files (x86)\\Sikuli X\\Sikuli-IDE.bat" -r '
-    # caminhoTesteSikuli = '"d:\\Dropbox\\My_Saved_data\\Faculdade\\TCC I\\Sikuli\\demo\\demo.sikuli"'
-    caminhoTesteSikuli = casoTeste.caminhoSikuli
-    subprocess.Popen(sikuliPath + caminhoTesteSikuli, shell=True)
-
-    print ("==============sikuli===================\n")
-    print (casoTeste.caminhoSikuli)
-    print (sikuliPath + caminhoTesteSikuli)
-    return HttpResponseRedirect('/gerenciador_testes/1/?executar')
-
 def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
@@ -150,10 +133,6 @@ def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id):
                               c,
                               context_instance=RequestContext(request))
 
-def remover_do_projeto(request, projeto_id, casoDeTeste_id):
-    casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).delete()
-    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
-
 def lista_testes_para_inserir_no_projeto(request, projeto_id):
     if request.method == 'POST':
         checkbox = request.POST.getlist('checks')
@@ -178,6 +157,37 @@ def lista_testes_para_inserir_no_projeto(request, projeto_id):
     return render_to_response('gerenciador_testes/lista_testes_inserir_no_projeto.html',
                               c,
                               context_instance=RequestContext(request))
+
+def registra_cancelar (request, projeto_id, casoDeTeste_id):
+    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
+
+def registra_passou (request, projeto_id, casoDeTeste_id):
+    data_atual = str(datetime.datetime.now())[:10]
+    #print("time now: " + data_atual)
+    casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).update(resultado='passou', dataExecucao=data_atual)
+    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
+
+def registra_falhou (request, projeto_id, casoDeTeste_id):
+    data_atual = str(datetime.datetime.now())[:10]
+    #print("time now: " + data_atual)
+    casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).update(resultado='falhou', dataExecucao=data_atual)
+    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
+
+def registra_sikuli (request, casoDeTeste_id):
+    casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
+    sikuliPath = 'c:\\"Program Files (x86)\\Sikuli X\\Sikuli-IDE.bat" -r '
+    # caminhoTesteSikuli = '"d:\\Dropbox\\My_Saved_data\\Faculdade\\TCC I\\Sikuli\\demo\\demo.sikuli"'
+    caminhoTesteSikuli = casoTeste.caminhoSikuli
+    subprocess.Popen(sikuliPath + caminhoTesteSikuli, shell=True)
+
+    print ("==============sikuli===================\n")
+    print (casoTeste.caminhoSikuli)
+    print (sikuliPath + caminhoTesteSikuli)
+    return HttpResponseRedirect('/gerenciador_testes/1/?executar')
+
+def remover_do_projeto(request, projeto_id, casoDeTeste_id):
+    casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).delete()
+    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
 
 def remover_teste(request, projeto_id, casoDeTeste_id):
     #Remove os passos associado ao caso de teste
