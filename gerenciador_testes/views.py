@@ -69,7 +69,31 @@ def lista_casos_teste_por_projeto(request, projeto_id):
                               context_instance=RequestContext(request))
 
 def lista_execucoes_por_projeto(request, projeto_id):
-    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/visao_geral' % (projeto_id))
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/gerenciador_testes/login')
+
+    #Coleta lista de execucoes excluindo os testes que nao tem resultado
+    listaExecucoes = casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id).exclude(resultado=None)
+    listaProjetos = projeto.objects.all()
+    meuProjeto = projeto.objects.get(pk=projeto_id)
+    for exc in listaExecucoes:
+        print ('nome do projeto: ' + str(exc.projeto_id))
+        print ('nome do caso de teste: ' + str(exc.casoDeTeste_id))
+        print ('resultado: ' + str(exc.resultado))
+        print ('data: ' + str(exc.dataExecucao))
+
+    c = Context({
+                 #'listaCasoTestes': listaCasoTestes,
+                 'listaExecucoes' : listaExecucoes,
+                 'listaProjetos' : listaProjetos,
+                 'meuProjeto': meuProjeto,
+    })
+
+    return render_to_response('gerenciador_testes/lista_execucoes_por_projeto.html',
+                              c,
+                              context_instance=RequestContext(request))
+    
+    #return HttpResponseRedirect('/gerenciador_testes/projeto/%s/visao_geral' % (projeto_id))
 
 def lista_todos_casos_testes(request, projeto_id):
     if not request.user.is_authenticated():
