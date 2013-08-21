@@ -40,20 +40,13 @@ class projeto(models.Model):
 class casoDeTesteEmProjeto(models.Model):
     projeto_id = models.ForeignKey(projeto)
     casoDeTeste_id = models.ForeignKey(casoDeTeste)
-    
+    resultado = models.CharField(max_length=6, null=True, blank=True)
+    dataExecucao = models.DateField('data de execucao', null=True, blank=True)
+
     def __unicode__(self):
         return u'Projeto: %s, Caso de Teste: %s' % (self.projeto_id.nomeProjeto, self.casoDeTeste_id.titulo)
-    
 
-
-
-
-
-
-
-
-
-class testSet(models.Model):    
+class testSet(models.Model):
     nome = models.CharField(max_length=200)
     dataAbertura = models.DateField('data de abertura')
     dataFechamento = models.DateField('data de fechamento', null=True, blank=True)
