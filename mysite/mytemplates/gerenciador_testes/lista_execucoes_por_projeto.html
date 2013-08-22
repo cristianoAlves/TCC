@@ -20,7 +20,11 @@
                 <td style="text-align:center">{{forloop.counter}}</td>
                 <td>{{ execucao.casoDeTeste_id.titulo }}</td>
                 <td style="text-align:center">{{ execucao.dataExecucao }}</td>
-                <td style="text-align:center">{{ execucao.resultado }}</td>
+                {% if execucao.resultado == 'passou' %}
+                    <td style="text-align:center;color:green">{{ execucao.resultado }}</td>
+                {% else %}
+                    <td style="text-align:center;color:red">{{ execucao.resultado }}</td>
+                {% endif %}
             </tr>
         {% endfor %}
     </table>
