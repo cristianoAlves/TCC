@@ -95,7 +95,7 @@ def lista_execucoes_por_projeto(request, projeto_id):
     
     #return HttpResponseRedirect('/gerenciador_testes/projeto/%s/visao_geral' % (projeto_id))
 
-def lista_todos_casos_testes(request, projeto_id):
+def lista_todos_casos_testes(request, projeto_id, casoDeTeste_id=0):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
 
@@ -104,18 +104,32 @@ def lista_todos_casos_testes(request, projeto_id):
     listaProjetos = projeto.objects.all()
     meuProjeto = projeto.objects.get(pk=projeto_id)
     meuProjetoNome = False
+    edit = False
 
     if request.method == 'POST':  # If the form has been submitted
         form = CasoDeTesteForm(request.POST)  # A form bound to the POST data
         if form.is_valid():  # All validation rules pass
             titulo_post = form.cleaned_data['titulo']
             caminho_post = form.cleaned_data['caminhoSikuli']
-            casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
-            casoDeTeste_obj.save()
+
+            # Verifica se for um edit, caso sim, coleta as novas informacoes e faz um update  
+            if casoDeTeste_id==0:
+                casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
+                casoDeTeste_obj.save()
+            else:
+                casoDeTeste.objects.filter(pk=casoDeTeste_id).update(titulo=titulo_post, caminhoSikuli=caminho_post)
         else:
             form_has_any_error = True
-    else:    
-        form = CasoDeTesteForm()
+    else:
+        # Caso do edit, se nao for =0, significa que o teste esta sendo editado,
+        # neste caso, o form precisa enviar os dados do caso de teste para tela
+        if not casoDeTeste_id==0:
+            #print ("casoDeTeste_id: " + str(casoDeTeste_id))
+            casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
+            form = CasoDeTesteForm(instance=casoTeste)
+            edit = True 
+        else:
+            form = CasoDeTesteForm()
 
     c = Context({
                  'listaCasoTestes': listaCasoTestes,
@@ -123,7 +137,8 @@ def lista_todos_casos_testes(request, projeto_id):
                  'form': form,
                  'form_has_any_errors' : form_has_any_error,
                  'meuProjetoNome': meuProjetoNome,
-                 'meuProjeto': meuProjeto,
+                 'meuProjeto' : meuProjeto,
+                 'edit' : edit,
     })
     
     return render_to_response('gerenciador_testes/principal.html',
