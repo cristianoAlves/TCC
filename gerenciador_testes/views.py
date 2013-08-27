@@ -49,6 +49,7 @@ def lista_projetos(request, projeto_id):
                               context_instance=RequestContext(request))
 
 def lista_casos_teste_por_projeto(request, projeto_id):
+    
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
 
@@ -173,6 +174,7 @@ def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id):
                               context_instance=RequestContext(request))
 
 def lista_testes_para_inserir_no_projeto(request, projeto_id):
+    
     if request.method == 'POST':
         checkbox = request.POST.getlist('checks')
         #print ("tamanho da lista: " + str(len(checkbox)))
@@ -243,8 +245,12 @@ def remover_teste(request, projeto_id, casoDeTeste_id):
 def visao_geral(request, projeto_id=1):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
+    
+    
 
     meuProjeto = projeto.objects.get(pk=projeto_id)
+    request.session['projetoid'] = meuProjeto
+    
     listaProjetos = projeto.objects.all()
     totalProjetos = len(listaProjetos)
     totalTesteEmProjeto = casoDeTeste.objects.filter(casodetesteemprojeto__projeto_id__exact=projeto_id).count()

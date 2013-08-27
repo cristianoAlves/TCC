@@ -32,7 +32,7 @@
             {{ form.as_p }} <!-- form as post -->
         </div> 
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="limpaCamposAdicionaTesteCase()">Limpar</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Limpar</button>
             <button class="btn btn-primary" type="submit">Salvar</button>
         </div>
     </form>
@@ -96,8 +96,9 @@ $(document).ready(function() {
     {% endif %}
 });
 
-function limpaCamposAdicionaTesteCase()
-{
-    window.location = '.';
-}
+$('#myModal').on('hide', function() {
+    $('#id_titulo').val('');
+    $('#id_caminhoSikuli').val('');
+});
+
 {% endblock %}
