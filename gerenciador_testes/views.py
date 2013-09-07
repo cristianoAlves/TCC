@@ -16,14 +16,14 @@ def logoutRequest(request):
     # Redirect to a success page.
     return HttpResponseRedirect('/gerenciador_testes/login')
 
-def lista_projetos(request, projeto_id):
+def lista_projetos(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
 
     form_has_any_error = False
 
     listaProjetos = projeto.objects.all()
-    meuProjeto = projeto.objects.get(pk=projeto_id)
+    meuProjeto = request.session['projetoid']
     if request.method == 'POST':  # If the form has been submitted
         formProj = ProjetoForm(request.POST)  # A form bound to the POST data
         if formProj.is_valid():  # All validation rules pass
@@ -73,7 +73,7 @@ def lista_execucoes_por_projeto(request, projeto_id):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
 
-    #Coleta lista de execucoes excluindo os testes que nao tem resultado
+    # Coleta lista de execucoes excluindo os testes que nao tem resultado
     listaExecucoes = casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id).exclude(resultado=None)
     listaProjetos = projeto.objects.all()
     meuProjeto = projeto.objects.get(pk=projeto_id)
@@ -84,7 +84,7 @@ def lista_execucoes_por_projeto(request, projeto_id):
         print ('data: ' + str(exc.dataExecucao))
 
     c = Context({
-                 #'listaCasoTestes': listaCasoTestes,
+                 # 'listaCasoTestes': listaCasoTestes,
                  'listaExecucoes' : listaExecucoes,
                  'listaProjetos' : listaProjetos,
                  'meuProjeto': meuProjeto,
@@ -94,7 +94,7 @@ def lista_execucoes_por_projeto(request, projeto_id):
                               c,
                               context_instance=RequestContext(request))
     
-    #return HttpResponseRedirect('/gerenciador_testes/projeto/%s/visao_geral' % (projeto_id))
+    # return HttpResponseRedirect('/gerenciador_testes/projeto/%s/visao_geral' % (projeto_id))
 
 def lista_todos_casos_testes(request, projeto_id, casoDeTeste_id=0):
     if not request.user.is_authenticated():
@@ -113,8 +113,8 @@ def lista_todos_casos_testes(request, projeto_id, casoDeTeste_id=0):
             titulo_post = form.cleaned_data['titulo']
             caminho_post = form.cleaned_data['caminhoSikuli']
 
-            # Verifica se for um edit, caso sim, coleta as novas informacoes e faz um update  
-            if casoDeTeste_id==0:
+            # Verifica se for um edit, caso sim(else), coleta as novas informacoes e faz um update  
+            if casoDeTeste_id == 0:
                 casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
                 casoDeTeste_obj.save()
             else:
@@ -124,8 +124,8 @@ def lista_todos_casos_testes(request, projeto_id, casoDeTeste_id=0):
     else:
         # Caso do edit, se nao for =0, significa que o teste esta sendo editado,
         # neste caso, o form precisa enviar os dados do caso de teste para tela
-        if not casoDeTeste_id==0:
-            #print ("casoDeTeste_id: " + str(casoDeTeste_id))
+        if not casoDeTeste_id == 0:
+            # print ("casoDeTeste_id: " + str(casoDeTeste_id))
             casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
             form = CasoDeTesteForm(instance=casoTeste)
             edit = True 
@@ -141,7 +141,7 @@ def lista_todos_casos_testes(request, projeto_id, casoDeTeste_id=0):
                  'meuProjeto' : meuProjeto,
                  'edit' : edit,
     })
-    
+
     return render_to_response('gerenciador_testes/principal.html',
                               c,
                               context_instance=RequestContext(request))
@@ -177,20 +177,20 @@ def lista_testes_para_inserir_no_projeto(request, projeto_id):
     
     if request.method == 'POST':
         checkbox = request.POST.getlist('checks')
-        #print ("tamanho da lista: " + str(len(checkbox)))
-        #for c in checkbox:
+        # print ("tamanho da lista: " + str(len(checkbox)))
+        # for c in checkbox:
         #    print ("valor: " + c)
-        #adiciona os testes no projeto
+        # adiciona os testes no projeto
         for c in checkbox:
             print ("inserindo teste id: " + str(c))
             casoDeTesteEmProjeto_obj = casoDeTesteEmProjeto(projeto_id=projeto.objects.get(pk=projeto_id), casoDeTeste_id=casoDeTeste.objects.get(pk=c))
             casoDeTesteEmProjeto_obj.save()
 
-    #Prepara lista de testes para o projeto
+    # Prepara lista de testes para o projeto
     listaCasoTestes = casoDeTeste.objects.all().exclude(casodetesteemprojeto__projeto_id__exact=projeto_id)
     meuProjeto = projeto.objects.get(pk=projeto_id)
     
-    #Seta o contexto
+    # Seta o contexto
     c = Context({
                  'listaCasoTestes': listaCasoTestes,
                  'meuProjeto': meuProjeto,
@@ -204,13 +204,13 @@ def registra_cancelar (request, projeto_id, casoDeTeste_id):
 
 def registra_passou (request, projeto_id, casoDeTeste_id):
     data_atual = str(datetime.datetime.now())[:10]
-    #print("time now: " + data_atual)
+    # print("time now: " + data_atual)
     casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).update(resultado='passou', dataExecucao=data_atual)
     return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
 
 def registra_falhou (request, projeto_id, casoDeTeste_id):
     data_atual = str(datetime.datetime.now())[:10]
-    #print("time now: " + data_atual)
+    # print("time now: " + data_atual)
     casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).update(resultado='falhou', dataExecucao=data_atual)
     return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
 
@@ -231,13 +231,13 @@ def remover_do_projeto(request, projeto_id, casoDeTeste_id):
     return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
 
 def remover_teste(request, projeto_id, casoDeTeste_id):
-    #Remove os passos associado ao caso de teste
+    # Remove os passos associado ao caso de teste
     casoDeTestePasso.objects.filter(casoDeTeste__exact=casoDeTeste_id).delete()
 
-    #Remove do Projeto
+    # Remove do Projeto
     casoDeTesteEmProjeto.objects.filter(casoDeTeste_id=casoDeTeste_id).delete()
 
-    #Remove o caso de teste
+    # Remove o caso de teste
     casoDeTeste.objects.get(pk=casoDeTeste_id).delete()
 
     return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes' % (projeto_id))
