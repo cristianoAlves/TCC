@@ -16,13 +16,17 @@
     <form name='myForm' method="post" action="">{% csrf_token %}
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" action="">×</button>
-            <h3 id="myModalLabel">Adicionar um Projeto</h3>
+            {% if edit %}
+                <h3 id="myModalLabel">Editar um Projeto</h3>
+            {% else %}
+                <h3 id="myModalLabel">Adicionar um Projeto</h3>
+            {% endif %}
         </div>
         <div class="modal-body">
             {{ formProj.as_p }}
         </div> 
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="limpaCamposAdicionaTesteCase()">Limpar</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Limpar</button>
             <button class="btn btn-primary" type="submit">Salvar</button>
         </div>
     </form>
@@ -57,10 +61,13 @@ $(document).ready(function() {
     {% if form_has_any_errors %}
         $('#myModal').modal('show');
     {% endif %}
+    {% if edit %}
+        $('#myModal').modal('show');
+    {% endif %}
 });
 
-function limpaCamposAdicionaTesteCase()
-{
-    window.location = '.';
-}
+$('#myModal').on('hide', function() {
+    $('#id_nomeProjeto').val('');
+    $('#id_dataAbertura').val('');
+});
 {% endblock %}

@@ -26,7 +26,11 @@
     <form name='myForm' method="post" action="">{% csrf_token %}
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" action="">×</button>
-            <h3 id="myModalLabel">Adicionar um Caso de Teste</h3>
+            {% if edit %}
+                <h3 id="myModalLabel">Editar um Caso de Teste</h3>
+            {% else %}
+                <h3 id="myModalLabel">Adicionar um Caso de Teste</h3>
+            {% endif %}
         </div>
         <div class="modal-body">
             {{ form.as_p }} <!-- form as post -->

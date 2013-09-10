@@ -16,32 +16,45 @@ def logoutRequest(request):
     # Redirect to a success page.
     return HttpResponseRedirect('/gerenciador_testes/login')
 
-def lista_projetos(request):
+def lista_projetos(request, projeto_id=0):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
 
     form_has_any_error = False
-
     listaProjetos = projeto.objects.all()
     meuProjeto = request.session['projetoid']
+    edit = False
+    
     if request.method == 'POST':  # If the form has been submitted
         formProj = ProjetoForm(request.POST)  # A form bound to the POST data
         if formProj.is_valid():  # All validation rules pass
             nome_post = formProj.cleaned_data['nomeProjeto']
             data_post = formProj.cleaned_data['dataAbertura']
-            projeto_obj = projeto(nomeProjeto=nome_post, dataAbertura=data_post)
-            projeto_obj.save()
-            return HttpResponseRedirect('../../gerenciador_testes/projeto')
+
+            # Verifica se for um edit, caso sim(else), coleta as novas informacoes e faz um update
+            if projeto_id == 0:
+                projeto_obj = projeto(nomeProjeto=nome_post, dataAbertura=data_post)
+                projeto_obj.save()
+            else:
+                projeto.objects.filter(pk=projeto_id).update(nomeProjeto=nome_post, dataAbertura=data_post)
         else:
-            form_has_any_error = True
-    else:    
-        formProj = ProjetoForm()
+            form_has_any_error = True 
+    else:
+        # Caso do edit, se nao for =0, significa que o projeto esta sendo editado,
+        # neste caso, o form precisa enviar os dados do projeto para tela
+        if not projeto_id == 0:
+            meuProjetoEdit = projeto.objects.get(pk=projeto_id)
+            formProj = ProjetoForm(instance=meuProjetoEdit)
+            edit = True 
+        else:
+            formProj = ProjetoForm()
 
     c = Context({
                  'listaProjetos': listaProjetos,
                  'meuProjeto': meuProjeto,
                  'formProj': formProj,
                  'form_has_any_errors' : form_has_any_error,
+                 'edit' : edit,
     })
         
     return render_to_response('gerenciador_testes/projeto.html',
@@ -93,8 +106,6 @@ def lista_execucoes_por_projeto(request, projeto_id):
     return render_to_response('gerenciador_testes/lista_execucoes_por_projeto.html',
                               c,
                               context_instance=RequestContext(request))
-    
-    # return HttpResponseRedirect('/gerenciador_testes/projeto/%s/visao_geral' % (projeto_id))
 
 def lista_todos_casos_testes(request, projeto_id, casoDeTeste_id=0):
     if not request.user.is_authenticated():
@@ -125,7 +136,6 @@ def lista_todos_casos_testes(request, projeto_id, casoDeTeste_id=0):
         # Caso do edit, se nao for =0, significa que o teste esta sendo editado,
         # neste caso, o form precisa enviar os dados do caso de teste para tela
         if not casoDeTeste_id == 0:
-            # print ("casoDeTeste_id: " + str(casoDeTeste_id))
             casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
             form = CasoDeTesteForm(instance=casoTeste)
             edit = True 
@@ -174,13 +184,8 @@ def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id):
                               context_instance=RequestContext(request))
 
 def lista_testes_para_inserir_no_projeto(request, projeto_id):
-    
     if request.method == 'POST':
         checkbox = request.POST.getlist('checks')
-        # print ("tamanho da lista: " + str(len(checkbox)))
-        # for c in checkbox:
-        #    print ("valor: " + c)
-        # adiciona os testes no projeto
         for c in checkbox:
             print ("inserindo teste id: " + str(c))
             casoDeTesteEmProjeto_obj = casoDeTesteEmProjeto(projeto_id=projeto.objects.get(pk=projeto_id), casoDeTeste_id=casoDeTeste.objects.get(pk=c))
@@ -189,7 +194,7 @@ def lista_testes_para_inserir_no_projeto(request, projeto_id):
     # Prepara lista de testes para o projeto
     listaCasoTestes = casoDeTeste.objects.all().exclude(casodetesteemprojeto__projeto_id__exact=projeto_id)
     meuProjeto = projeto.objects.get(pk=projeto_id)
-    
+
     # Seta o contexto
     c = Context({
                  'listaCasoTestes': listaCasoTestes,
@@ -204,17 +209,16 @@ def registra_cancelar (request, projeto_id, casoDeTeste_id):
 
 def registra_passou (request, projeto_id, casoDeTeste_id):
     data_atual = str(datetime.datetime.now())[:10]
-    # print("time now: " + data_atual)
     casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).update(resultado='passou', dataExecucao=data_atual)
     return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
 
 def registra_falhou (request, projeto_id, casoDeTeste_id):
     data_atual = str(datetime.datetime.now())[:10]
-    # print("time now: " + data_atual)
+
     casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).update(resultado='falhou', dataExecucao=data_atual)
     return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
 
-def registra_sikuli (request, casoDeTeste_id):
+def registra_sikuli (request, projeto_id, casoDeTeste_id):
     casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
     sikuliPath = 'c:\\"Program Files (x86)\\Sikuli X\\Sikuli-IDE.bat" -r '
     # caminhoTesteSikuli = '"d:\\Dropbox\\My_Saved_data\\Faculdade\\TCC I\\Sikuli\\demo\\demo.sikuli"'
@@ -224,7 +228,8 @@ def registra_sikuli (request, casoDeTeste_id):
     print ("==============sikuli===================\n")
     print (casoTeste.caminhoSikuli)
     print (sikuliPath + caminhoTesteSikuli)
-    return HttpResponseRedirect('/gerenciador_testes/1/?executar')
+    # return HttpResponseRedirect('/gerenciador_testes/1/?executar')
+    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
 
 def remover_do_projeto(request, projeto_id, casoDeTeste_id):
     casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).delete()
