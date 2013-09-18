@@ -27,10 +27,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="/gerenciador_testes/projeto/1/visao_geral/">Gerenciador de Testes  {{ request.session.projetoid.id }}</a>
+          <a class="brand" href="/gerenciador_testes/projeto/1/visao_geral/">Gerenciador de Testes</a>
           <div class="nav-collapse collapse">
             <p class="navbar-text pull-right">
-                Usuário: {{ user.username }},  <a href="/gerenciador_testes/logout/" class="navbar-link">Sair</a>            
+                Usuário: {{ user.username }},  <a href="/gerenciador_testes/logout/" class="navbar-link">Sair</a>
             </p>
           </div><!--/.nav-collapse -->
         </div>
@@ -64,15 +64,15 @@
 
                 <ul class="nav nav-list">
                     <li class="nav-header">Projeto</li>
-                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/visao_geral/">Visão Geral</a></li>
-                    <li class="nav-header">Casos de Teste</li>
-                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/lista_casos_teste_por_projeto">Ver Todos</a></li>
-                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/lista_execucoes_por_projeto">Ver Execuções</a></li>
+                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/visao_geral/" style="margin-left:5px">Visão Geral</a></li>
+                    <li class="nav-header" style="margin-left:5px">Casos de Teste</li>
+                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/lista_casos_teste_por_projeto" style="margin-left:15px">Ver Todos</a></li>
+                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/lista_execucoes_por_projeto" style="margin-left:15px">Ver Execuções</a></li>
                     <li class="nav-header">Relatórios</li>
-                    <li><a href="/gerenciador_testes/projeto">Ver todos Projetos</a></li> 
-                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes">Ver todos Testes</a></li> 
-                    <li><a href="/gerenciador_testes/projeto/execucoes_todas/">Ver todas Execuções</a></li> 
-                    <li><a href="#">Relatório1</a></li>
+                    <li><a href="/gerenciador_testes/projeto" style="margin-left:5px">Ver todos Projetos</a></li> 
+                    <li><a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes" style="margin-left:5px">Ver todos Testes</a></li> 
+                    <li><a href="/gerenciador_testes/projeto/execucoes_todas/" style="margin-left:5px">Ver todas Execuções</a></li> 
+                    <li><a href="#" style="margin-left:5px">Relatório1</a></li>
                 </ul>
             </div><!--/.well -->
         </div><!--/span-->
