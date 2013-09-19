@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^gerenciador_testes/projeto/(?P<projeto_id>\d+)/lista_execucoes_por_projeto', 'gerenciador_testes.views.lista_execucoes_por_projeto'),
     url(r'^gerenciador_testes/projeto/(?P<projeto_id>\d+)/visao_geral', 'gerenciador_testes.views.visao_geral', name='url_visao_geral'),
     url(r'^gerenciador_testes/projeto/(?P<projeto_id>\d+)/editar', 'gerenciador_testes.views.lista_projetos'),
+    url(r'^gerenciador_testes/projeto/(?P<projeto_id>\d+)/deletar', 'gerenciador_testes.views.remover_projeto'),
 
     url(r'^gerenciador_testes/projeto/(?P<projeto_id>\d+)/casos_de_testes/(?P<casoDeTeste_id>\d+)/remover_do_projeto$', 'gerenciador_testes.views.remover_do_projeto'),
     url(r'^gerenciador_testes/projeto/(?P<projeto_id>\d+)/casos_de_testes/(?P<casoDeTeste_id>\d+)/deletar$', 'gerenciador_testes.views.remover_teste'),

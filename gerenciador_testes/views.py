@@ -229,11 +229,20 @@ def registra_sikuli (request, projeto_id, casoDeTeste_id):
     print (casoTeste.caminhoSikuli)
     print (sikuliPath + caminhoTesteSikuli)
     # return HttpResponseRedirect('/gerenciador_testes/1/?executar')
-    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
+    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes/%s/?executar' % (projeto_id, casoDeTeste_id))
 
 def remover_do_projeto(request, projeto_id, casoDeTeste_id):
     casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).delete()
     return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
+
+def remover_projeto(request, projeto_id):
+    # remove todos os testes do projeto
+    casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id).delete()
+    
+    # remove o projeto
+    projeto.objects.get(pk=projeto_id).delete()
+
+    return HttpResponseRedirect('/gerenciador_testes/projeto/')
 
 def remover_teste(request, projeto_id, casoDeTeste_id):
     # Remove os passos associado ao caso de teste
