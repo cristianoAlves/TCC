@@ -15,7 +15,8 @@
         {% if meuProjetoNome %}
             <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/lista_testes_para_inserir_no_projeto" role= "button" class="btn"><i class="icon-plus"></i></a>
         {% else %}
-            <a href="#myModal" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>
+            <!--  <a href="#myModal" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>-->
+            <a href="/gerenciador_testes/projeto/{{ request.session.projetoid.id }}/casos_de_testes#myModal" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>
     {% endif %}
 
     </div>

@@ -124,12 +124,19 @@ def lista_todos_casos_testes(request, projeto_id, casoDeTeste_id=0):
             titulo_post = form.cleaned_data['titulo']
             caminho_post = form.cleaned_data['caminhoSikuli']
 
-            # Verifica se for um edit, caso sim(else), coleta as novas informacoes e faz um update  
+            # Verifica se for um edit, caso sim(else), coleta as novas informacoes e faz um update
             if casoDeTeste_id == 0:
                 casoDeTeste_obj = casoDeTeste(titulo=titulo_post, caminhoSikuli=caminho_post)
                 casoDeTeste_obj.save()
+                # limpa o form
+                form = CasoDeTesteForm()
+                return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes' % (projeto_id))
+                
             else:
                 casoDeTeste.objects.filter(pk=casoDeTeste_id).update(titulo=titulo_post, caminhoSikuli=caminho_post)
+                # limpa o form
+                form = CasoDeTesteForm()
+                return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes' % (projeto_id))
         else:
             form_has_any_error = True
     else:
@@ -141,6 +148,7 @@ def lista_todos_casos_testes(request, projeto_id, casoDeTeste_id=0):
             edit = True 
         else:
             form = CasoDeTesteForm()
+            # return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes' % (projeto_id))
 
     c = Context({
                  'listaCasoTestes': listaCasoTestes,
