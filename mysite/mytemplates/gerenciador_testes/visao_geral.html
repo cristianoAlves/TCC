@@ -25,7 +25,12 @@
     </tr>
     <tr>
         <td style="text-align: left"> Resultado última execução:</td>
-        <td style="text-align: center"> <b style="color:red"> {{ ultimaExecucao }} </b></td>
+        {% if ultimaExecucao.resultado == 'passou' %}
+            <td style="text-align:center;color:green"> <b style="color:green"> {{ ultimaExecucao.resultado }} </b></td>
+        {% else %}
+            <td style="text-align:center;color:green"> <b style="color:red"> {{ ultimaExecucao.resultado }} </b></td>
+        {% endif %}
+        
     </tr>
     <tr>
         <td style="text-align: left;"> Acumulado de falhas:</td>

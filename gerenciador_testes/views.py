@@ -276,7 +276,9 @@ def visao_geral(request, projeto_id=1):
     listaProjetos = projeto.objects.all()
     totalProjetos = len(listaProjetos)
     totalTesteEmProjeto = casoDeTeste.objects.filter(casodetesteemprojeto__projeto_id__exact=projeto_id).count()
-    ultimaExecucao = 'falhou'
+    
+    # descobre qual status da ultima execucao
+    ultimaExecucao = casoDeTesteEmProjeto.objects.latest('dataExecucao')
     acumuladoFalhas = '5.7%'
     acumuladoSucesso = '94.3%'
 
