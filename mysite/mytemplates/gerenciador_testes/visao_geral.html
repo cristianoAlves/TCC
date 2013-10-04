@@ -24,17 +24,12 @@
         <td style="text-align: center"> {{ totalTesteEmProjeto }}</td>
     </tr>
     <tr>
-        <td style="text-align: left"> Resultado última execução:</td>
-        {% if ultimaExecucao.resultado == 'passou' %}
-            <td style="text-align:center;color:green"> <b style="color:green"> {{ ultimaExecucao.resultado }} </b></td>
-        {% else %}
-            <td style="text-align:center;color:green"> <b style="color:red"> {{ ultimaExecucao.resultado }} </b></td>
-        {% endif %}
-        
+        <td style="text-align: left;"> Aguardando Execucao:</td>
+        <td style="text-align: center"> {{ aguardandoExecucao }}</td>
     </tr>
     <tr>
         <td style="text-align: left;"> Acumulado de falhas:</td>
-        <td style="text-align: center"> {{ acumuladoFalhas }}</td>
+        <td style="text-align:center;color:red"> {{ acumuladoFalhas }}</td>
     </tr>
     <tr>
         <td style="text-align: left"> Acumulado de sucesso:</td>

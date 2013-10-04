@@ -217,6 +217,7 @@ def registra_cancelar (request, projeto_id, casoDeTeste_id):
 
 def registra_passou (request, projeto_id, casoDeTeste_id):
     data_atual = str(datetime.datetime.now())[:10]
+    print ('data: ' + data_atual)
     casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).update(resultado='passou', dataExecucao=data_atual)
     return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
 
@@ -276,20 +277,26 @@ def visao_geral(request, projeto_id=1):
     listaProjetos = projeto.objects.all()
     totalProjetos = len(listaProjetos)
     totalTesteEmProjeto = casoDeTeste.objects.filter(casodetesteemprojeto__projeto_id__exact=projeto_id).count()
-    
+
     # descobre qual status da ultima execucao
-    ultimaExecucao = casoDeTesteEmProjeto.objects.latest('dataExecucao')
-    acumuladoFalhas = '5.7%'
-    acumuladoSucesso = '94.3%'
+    ultimoTesteExecutado = casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id).latest('dataExecucao')
+
+    # Coleta dos resultados gerais
+    passou = casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, resultado__exact='passou').count()
+    falhou = casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, resultado__exact='falhou').count()
+    aguardandoExecucao = str(casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, resultado=None).count())
+    acumuladoFalhas = str(falhou)
+    acumuladoSucesso = str(passou)
 
     c = Context({
                  'meuProjeto': meuProjeto,
                  'listaProjetos': listaProjetos,
                  'totalProjetos': totalProjetos,
                  'totalTesteEmProjeto': totalTesteEmProjeto,
-                 'ultimaExecucao' : ultimaExecucao,
+                 'ultimoTesteExecutado' : ultimoTesteExecutado,
                  'acumuladoFalhas': acumuladoFalhas,
                  'acumuladoSucesso': acumuladoSucesso,
+                 'aguardandoExecucao': aguardandoExecucao,
     })
     return render_to_response('gerenciador_testes/visao_geral.html',
                               c,
