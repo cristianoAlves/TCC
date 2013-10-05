@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django import forms
-from gerenciador_testes.models import casoDeTeste, projeto
+from gerenciador_testes.models import casoDeTeste, projeto, casoDeTestePasso
 from django.forms import ModelForm
 import datetime
 
@@ -18,3 +18,11 @@ class ProjetoForm(ModelForm):
     
     class Meta:
         model = projeto
+
+class CasoDeTestePassoForm(ModelForm):
+    desc = forms.CharField(max_length=200, label=u'Descricao')
+    resultExperado = forms.CharField(max_length=200, label=u'Resultado esperado')
+    
+    class Meta:
+        model = casoDeTestePasso
+        exclude = ('casoDeTeste', 'nPasso',)

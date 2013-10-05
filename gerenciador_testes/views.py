@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from gerenciador_testes.models import casoDeTeste, casoDeTestePasso, projeto, casoDeTesteEmProjeto
 from django.shortcuts import render_to_response
 from django.contrib import auth
-from forms import CasoDeTesteForm, ProjetoForm
+from forms import CasoDeTesteForm, ProjetoForm, CasoDeTestePassoForm
 from django.utils.datastructures import MultiValueDictKeyError
 import subprocess
 import datetime
@@ -164,15 +164,17 @@ def lista_todos_casos_testes(request, projeto_id, casoDeTeste_id=0):
                               c,
                               context_instance=RequestContext(request))
 
-def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id):
+def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id, casoDeTestePasso_id=0):
     if not request.user.is_authenticated():
         return HttpResponseRedirect('/gerenciador_testes/login')
 
+    form_has_any_error = False
     listaDePassos = casoDeTestePasso.objects.filter(casoDeTeste__exact=casoDeTeste_id)
     casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
     listaProjetos = projeto.objects.all()
     meuProjeto = projeto.objects.get(pk=projeto_id)
     ex = None
+    edit = False
 
     try:
         if 'executar' in request.GET.keys():
@@ -180,12 +182,49 @@ def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id):
     except MultiValueDictKeyError:
         pass
     
+    if request.method == 'POST':  # If the form has been submitted
+        form = CasoDeTestePassoForm(request.POST)  # A form bound to the POST data
+        if form.is_valid():  # All validation rules pass
+            print('** form is valid **')
+            descPost = form.cleaned_data['desc']
+            resultPost = form.cleaned_data['resultExperado']
+
+            # Verifica se for um edit, caso sim(else), coleta as novas informacoes e faz um update
+            if casoDeTestePasso_id == 0:
+                print('** casoDeTestePasso = 0 **')
+                casoDeTestePasso_obj = casoDeTestePasso(casoDeTeste=casoTeste, nPasso=1, desc=descPost, resultExperado=resultPost)
+                casoDeTestePasso_obj.save()
+                # limpa o form
+                form = CasoDeTestePassoForm()
+                return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes/%s' % (projeto_id, casoDeTeste_id))
+
+            else:
+                print('** pass **')  # casoDeTeste.objects.filter(pk=casoDeTeste_id).update(titulo=titulo_post, caminhoSikuli=caminho_post)
+                # limpa o form
+                # form = CasoDeTesteForm()
+                # return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes' % (projeto_id))
+        else:
+            print('** form has any error **')
+            form_has_any_error = True
+    else:
+        # Caso do edit, se nao for =0, significa que o teste esta sendo editado,
+        # neste caso, o form precisa enviar os dados do caso de teste para tela
+        form = CasoDeTestePassoForm()  # if not casoDeTeste_id == 0:
+        print('***************  aki ******************')
+            # casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
+            # form = CasoDeTesteForm(instance=casoTeste)
+            # edit = True 
+        # else:
+         #   form = CasoDeTesteForm()
+    
+    
     c = Context({
         'listaDePassos': listaDePassos,
-        'casoTeste': casoTeste,
+        'casoDeTeste': casoTeste,
         'listaProjetos' : listaProjetos,
         'meuProjeto' : meuProjeto,
         'ex': ex,
+        'form': form,
     })
     return render_to_response('gerenciador_testes/detail.html',
                               c,
@@ -279,21 +318,27 @@ def visao_geral(request, projeto_id=1):
     totalTesteEmProjeto = casoDeTeste.objects.filter(casodetesteemprojeto__projeto_id__exact=projeto_id).count()
 
     # descobre qual status da ultima execucao
-    ultimoTesteExecutado = casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id).latest('dataExecucao')
+    # ultimoTesteExecutado = casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id).latest('dataExecucao')
 
     # Coleta dos resultados gerais
     passou = casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, resultado__exact='passou').count()
     falhou = casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, resultado__exact='falhou').count()
-    aguardandoExecucao = str(casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, resultado=None).count())
-    acumuladoFalhas = str(falhou)
-    acumuladoSucesso = str(passou)
+    aguardandoExecucao = casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, resultado=None).count()
+    totalTesteValidosParaExecutar = totalTesteEmProjeto - aguardandoExecucao
+
+    if totalTesteValidosParaExecutar > 0 :
+        acumuladoFalhas = str(falhou * 100 / totalTesteValidosParaExecutar)
+        acumuladoSucesso = str(passou * 100 / totalTesteValidosParaExecutar)
+    else:
+        acumuladoFalhas = 0
+        acumuladoSucesso = 0
 
     c = Context({
                  'meuProjeto': meuProjeto,
                  'listaProjetos': listaProjetos,
                  'totalProjetos': totalProjetos,
                  'totalTesteEmProjeto': totalTesteEmProjeto,
-                 'ultimoTesteExecutado' : ultimoTesteExecutado,
+                 # 'ultimoTesteExecutado' : ultimoTesteExecutado,
                  'acumuladoFalhas': acumuladoFalhas,
                  'acumuladoSucesso': acumuladoSucesso,
                  'aguardandoExecucao': aguardandoExecucao,
