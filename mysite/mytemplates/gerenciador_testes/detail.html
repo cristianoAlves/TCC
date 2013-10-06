@@ -51,7 +51,7 @@
                 <td>{{ passos.resultExperado }}</td>
                 {% if not ex %}
                     <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes/{{ casoDeTeste.id }}/editar" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
-                    <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes/{{ casoDeTeste.id }}/deletar" data-toggle="tooltip" title="Deletar"><i class="icon-trash"></i></a></td>
+                    <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes/{{ casoDeTeste.id }}/passos/{{ passos.id }}/deletar" data-toggle="tooltip" title="Deletar"><i class="icon-trash"></i></a></td>
                 {% endif %}
             </tr>
         {% endfor %}
@@ -93,7 +93,7 @@ $(document).ready(function() {
 });
 
 $('#myModal').on('hide', function() {
-    $('#id_titulo').val('');
-    $('#id_caminhoSikuli').val('');
+    $('#id_desc').val('');
+    $('#id_resultExperado').val('');
 });
 {% endblock %}

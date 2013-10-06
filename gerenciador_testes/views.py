@@ -225,6 +225,7 @@ def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id, casoDeTe
         'meuProjeto' : meuProjeto,
         'ex': ex,
         'form': form,
+        'form_has_any_errors' : form_has_any_error,
     })
     return render_to_response('gerenciador_testes/detail.html',
                               c,
@@ -282,6 +283,12 @@ def registra_sikuli (request, projeto_id, casoDeTeste_id):
 def remover_do_projeto(request, projeto_id, casoDeTeste_id):
     casoDeTesteEmProjeto.objects.filter(projeto_id=projeto_id, casoDeTeste_id=casoDeTeste_id).delete()
     return HttpResponseRedirect('/gerenciador_testes/projeto/%s/lista_casos_teste_por_projeto' % (projeto_id))
+
+def remover_passo(request, projeto_id, casoDeTeste_id, casoDeTestePasso_id):
+    print('** remove passo **')
+    print('projeto:' + projeto_id + ' ** ' + 'caso de teste:' + casoDeTeste_id + ' ** ' + 'passo:' + casoDeTestePasso_id)
+    casoDeTestePasso.objects.filter(pk=casoDeTestePasso_id).delete()
+    return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes/%s' % (projeto_id, casoDeTeste_id))
 
 def remover_projeto(request, projeto_id):
     # remove todos os testes do projeto
