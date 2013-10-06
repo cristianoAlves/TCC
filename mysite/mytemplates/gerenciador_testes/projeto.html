@@ -69,5 +69,9 @@ $(document).ready(function() {
 $('#myModal').on('hide', function() {
     $('#id_nomeProjeto').val('');
     $('#id_dataAbertura').val('');
+    {% if edit %}
+        var loc = window.location;
+        window.location = loc.protocol+"//"+loc.hostname+':8000/gerenciador_testes/projeto';
+    {% endif %}
 });
 {% endblock %}

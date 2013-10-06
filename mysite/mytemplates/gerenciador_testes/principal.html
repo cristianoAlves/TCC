@@ -104,5 +104,10 @@ $(document).ready(function() {
 $('#myModal').on('hide', function() {
     $('#id_titulo').val('');
     $('#id_caminhoSikuli').val('');
+    {% if edit %}
+        var loc = window.location;
+        var projeto_id = {{meuProjeto.id}}
+        window.location = loc.protocol+"//"+loc.hostname+':8000/gerenciador_testes/projeto/' + projeto_id + '/casos_de_testes';
+    {% endif %}
 });
 {% endblock %}

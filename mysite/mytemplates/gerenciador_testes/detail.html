@@ -50,7 +50,7 @@
                 <td>{{ passos.desc }}</td>
                 <td>{{ passos.resultExperado }}</td>
                 {% if not ex %}
-                    <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes/{{ casoDeTeste.id }}/editar" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
+                    <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes/{{ casoDeTeste.id }}/passos/{{ passos.id }}/editar" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
                     <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/{{meuProjeto.id}}/casos_de_testes/{{ casoDeTeste.id }}/passos/{{ passos.id }}/deletar" data-toggle="tooltip" title="Deletar"><i class="icon-trash"></i></a></td>
                 {% endif %}
             </tr>
@@ -95,5 +95,11 @@ $(document).ready(function() {
 $('#myModal').on('hide', function() {
     $('#id_desc').val('');
     $('#id_resultExperado').val('');
+    {% if edit %}
+        var loc = window.location;
+        var projeto_id = {{meuProjeto.id}}
+        var casoTeste_id = {{casoDeTeste.id}}
+        window.location = loc.protocol+"//"+loc.hostname+':8000/gerenciador_testes/projeto/' + projeto_id + '/casos_de_testes/' + casoTeste_id;
+    {% endif %}
 });
 {% endblock %}

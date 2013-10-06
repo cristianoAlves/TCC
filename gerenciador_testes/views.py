@@ -9,8 +9,6 @@ from django.utils.datastructures import MultiValueDictKeyError
 import subprocess
 import datetime
 
-
-
 def logoutRequest(request):
     auth.logout(request)
     # Redirect to a success page.
@@ -183,40 +181,42 @@ def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id, casoDeTe
         pass
     
     if request.method == 'POST':  # If the form has been submitted
+        print('** metodo POST **')
         form = CasoDeTestePassoForm(request.POST)  # A form bound to the POST data
         if form.is_valid():  # All validation rules pass
-            print('** form is valid **')
+            print('** formulario eh valido **')
             descPost = form.cleaned_data['desc']
             resultPost = form.cleaned_data['resultExperado']
 
             # Verifica se for um edit, caso sim(else), coleta as novas informacoes e faz um update
             if casoDeTestePasso_id == 0:
-                print('** casoDeTestePasso = 0 **')
+                print('** Adicionando novo passo no caso de teste ' + casoTeste.titulo + ' **')
                 casoDeTestePasso_obj = casoDeTestePasso(casoDeTeste=casoTeste, nPasso=1, desc=descPost, resultExperado=resultPost)
                 casoDeTestePasso_obj.save()
                 # limpa o form
                 form = CasoDeTestePassoForm()
                 return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes/%s' % (projeto_id, casoDeTeste_id))
-
             else:
-                print('** pass **')  # casoDeTeste.objects.filter(pk=casoDeTeste_id).update(titulo=titulo_post, caminhoSikuli=caminho_post)
+                print('** Editando passo com novos dados **')
+                casoDeTestePasso.objects.filter(pk=casoDeTestePasso_id).update(desc=descPost, resultExperado=resultPost)
                 # limpa o form
-                # form = CasoDeTesteForm()
+                form = CasoDeTestePassoForm()
                 # return HttpResponseRedirect('/gerenciador_testes/projeto/%s/casos_de_testes' % (projeto_id))
         else:
-            print('** form has any error **')
+            print('** formulario tem algum erro **')
             form_has_any_error = True
     else:
         # Caso do edit, se nao for =0, significa que o teste esta sendo editado,
         # neste caso, o form precisa enviar os dados do caso de teste para tela
-        form = CasoDeTestePassoForm()  # if not casoDeTeste_id == 0:
-        print('***************  aki ******************')
-            # casoTeste = casoDeTeste.objects.get(pk=casoDeTeste_id)
-            # form = CasoDeTesteForm(instance=casoTeste)
-            # edit = True 
-        # else:
-         #   form = CasoDeTesteForm()
-    
+        if not casoDeTestePasso_id == 0:
+            print('** Edicao de passo iniciada, criando formulario para edicao ** ')
+            casoDeTestePasso_obj = casoDeTestePasso.objects.get(pk=casoDeTestePasso_id)
+            form = CasoDeTestePassoForm(instance=casoDeTestePasso_obj)
+            edit = True 
+        else:
+            print('** Listando os passos para o teste: ' + casoTeste.titulo + ' **')
+            form = CasoDeTesteForm()
+
     
     c = Context({
         'listaDePassos': listaDePassos,
@@ -226,6 +226,7 @@ def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id, casoDeTe
         'ex': ex,
         'form': form,
         'form_has_any_errors' : form_has_any_error,
+        'edit' : edit,
     })
     return render_to_response('gerenciador_testes/detail.html',
                               c,
