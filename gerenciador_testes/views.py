@@ -215,7 +215,7 @@ def lista_passos_por_caso_de_teste(request, projeto_id, casoDeTeste_id, casoDeTe
             edit = True 
         else:
             print('** Listando os passos para o teste: ' + casoTeste.titulo + ' **')
-            form = CasoDeTesteForm()
+            form = CasoDeTestePassoForm()
 
     
     c = Context({

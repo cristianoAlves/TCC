@@ -6,7 +6,7 @@
     <h3 style="float:left"> {{ casoDeTeste.titulo }} </h3>
     {% if not ex %}
         <div class="btn-group" style="float:right; margin-top:15px">
-             <a href="#myModal" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>
+             <a href="#myModalPassos" role= "button" class="btn" data-toggle="modal" data-backdrop="true"><i class="icon-plus"></i></a>
         </div>
     {% endif %}
 </div>
@@ -14,7 +14,7 @@
 </br>
 
 <!-- Modal -->
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="myModalPassos" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <form name='myForm' method="post" action="">{% csrf_token %}
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" action="">×</button>
@@ -85,14 +85,14 @@
 {% block meuscript %}
 $(document).ready(function() {
     {% if form_has_any_errors %}
-        $('#myModal').modal('show');
+        $('#myModalPassos').modal('show');
     {% endif %}
     {% if edit %}
-        $('#myModal').modal('show');
+        $('#myModalPassos').modal('show');
     {% endif %}
 });
 
-$('#myModal').on('hide', function() {
+$('#myModalPassos').on('hide', function() {
     $('#id_desc').val('');
     $('#id_resultExperado').val('');
     {% if edit %}
