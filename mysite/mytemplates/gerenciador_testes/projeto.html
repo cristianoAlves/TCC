@@ -42,7 +42,7 @@
             {% for projeto in listaProjetos %}
                 <tr>
                     <td>{{forloop.counter}}</td>
-                    <td> <a href="/gerenciador_testes/projeto/{{ projeto.id }}/">{{ projeto.nomeProjeto }}</a></td>
+                    <td> <a href="/gerenciador_testes/projeto/{{ projeto.id }}/visao_geral">{{ projeto.nomeProjeto }}</a></td>
                     <td style="text-align: center"> {{ projeto.dataAbertura }} </td>
                     <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/{{ projeto.id }}/editar" data-toggle="tooltip" title="Editar"><i class="icon-edit"></i></a></td>
                     <td style="text-align: center" WIDTH="40"> <a href="/gerenciador_testes/projeto/{{ projeto.id }}/deletar" data-toggle="tooltip" title="Deletar"><i class="icon-trash"></i></a></td>
